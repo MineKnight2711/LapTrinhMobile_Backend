@@ -1,6 +1,7 @@
 package com.example.keyboard_mobile_app.test;
 
-import com.example.keyboard_mobile_app.model.User;
+import com.example.keyboard_mobile_app.entity.Account;
+import com.example.keyboard_mobile_app.test.test_repo.TestRepository;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,29 +17,39 @@ import java.util.concurrent.ExecutionException;
 public class TestFirestoreService {
     @Autowired
     private Firestore firestore;
-    public List<User> getAllUser() throws ExecutionException, InterruptedException {
-        List<User> userList = new ArrayList<>();
+    @Autowired
+    private TestRepository testRepository;
+    public List<Account> getUserByName(String name) throws ExecutionException, InterruptedException {
+        List<Account> users = testRepository.findByUsername(name);
+        if (!users.isEmpty()) {
+            return users;
+        } else {
+            return null;
+        }
+    }
+    public List<Account> getAllUser() throws ExecutionException, InterruptedException {
+        List<Account> userList = new ArrayList<>();
         ApiFuture<QuerySnapshot> future = firestore.collection("user").get();
 
         for (QueryDocumentSnapshot document : future.get().getDocuments()) {
-            User user = document.toObject(User.class);
+            Account user = document.toObject(Account.class);
             userList.add(user);
         }
 
         return userList;
     }
-    public User add(User user) {
+    public Account add(Account user) {
         CollectionReference collection = firestore.collection("user");
         DocumentReference document = collection.document();
         user.setId(document.getId());
         document.set(user);
         return user;
     }
-    public User update(String id,User updatedUser) throws ExecutionException, InterruptedException {
+    public Account update(String id, Account updatedUser) throws ExecutionException, InterruptedException {
         DocumentReference document = firestore.collection("user").document(id);
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put("name", updatedUser.getName());
-        userMap.put("age", updatedUser.getAge());
+        userMap.put("name", updatedUser.getFullName());
+        userMap.put("age", updatedUser.getBirthday());
         document.update(userMap).get();
         return updatedUser;
     }
