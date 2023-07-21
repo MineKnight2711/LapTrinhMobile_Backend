@@ -22,7 +22,7 @@ public class TestController {
         return firestoreService.getAllUser();
     }
     @PostMapping
-    public Account addDocumentToFirestore(@ModelAttribute Account user) {
+    public Account addDocumentToFirestore(@ModelAttribute Account user) throws ExecutionException, InterruptedException {
         return firestoreService.add(user);
     }
     @PutMapping("/{id}")

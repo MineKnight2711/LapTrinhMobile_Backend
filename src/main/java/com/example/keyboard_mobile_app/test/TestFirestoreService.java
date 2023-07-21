@@ -39,9 +39,8 @@ public class TestFirestoreService {
         return userList;
     }
     public Account add(Account user) {
-        CollectionReference collection = firestore.collection("user");
-        DocumentReference document = collection.document();
-        user.setId(document.getId());
+        CollectionReference collection = firestore.collection("users");
+        DocumentReference document = collection.document(user.getId());
         document.set(user);
         return user;
     }
