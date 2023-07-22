@@ -11,10 +11,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Past;
 import java.util.Date;
-
 @Data
 @Getter
 @Setter
+
 public class Account {
     private String fullName;
     @Temporal(TemporalType.TIMESTAMP)

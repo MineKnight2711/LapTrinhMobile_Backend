@@ -1,15 +1,14 @@
 package com.example.keyboard_mobile_app.modules.account.service;
 
 import com.example.keyboard_mobile_app.entity.Account;
-import com.example.keyboard_mobile_app.modules.account.repository.AccountRepository;
+import com.example.keyboard_mobile_app.modules.account.dto.AccountResponseDto;
 
-import com.example.keyboard_mobile_app.utils.DataConvertService;
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
+import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -17,10 +16,29 @@ import java.util.concurrent.ExecutionException;
 public class AccountService {
     @Autowired
     private Firestore firestore;
-    @Autowired
-    private AccountRepository accountRepository;
 
+    public AccountResponseDto getAccountById(String accountId) throws InterruptedException, ExecutionException {
+        Firestore firestore = FirestoreClient.getFirestore();
 
+        // Specify the path to the account document in Firestore
+        DocumentReference docRef = firestore.collection("users").document(accountId);
+
+        // Fetch the account document
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = future.get();
+        AccountResponseDto account=new AccountResponseDto();
+        if (document.exists()) {
+            // Convert the document data to an AccountResponse object
+            account = document.toObject(AccountResponseDto.class);
+            account.setId(document.getId());
+            account.setStatus("Found!!!");
+            return account;
+        } else {
+            // Account with the specified ID not found
+            account.setStatus("Không tìm thấy tài khoản!");
+            return account;
+        }
+    }
     public Account create(String id,Account user) {
         CollectionReference collection = firestore.collection("users");
         DocumentReference document = collection.document(id);
