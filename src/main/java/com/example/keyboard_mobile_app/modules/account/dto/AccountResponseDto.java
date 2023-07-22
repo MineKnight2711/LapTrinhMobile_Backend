@@ -20,5 +20,4 @@ public class AccountResponseDto {
     private String address;
     private String accountType;
     private String status;
-
 }
