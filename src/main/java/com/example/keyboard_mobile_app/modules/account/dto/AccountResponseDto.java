@@ -11,14 +11,11 @@ import java.util.Date;
 public class AccountResponseDto {
     private String id;
     private String imageUrl;
-    private String nickname;
+    private String userName;
     private String fullName;
     private String phone;
     private String email;
     private String gender;
     private Date birthday;
-    private String address;
     private String accountType;
-    private String status;
-
 }
