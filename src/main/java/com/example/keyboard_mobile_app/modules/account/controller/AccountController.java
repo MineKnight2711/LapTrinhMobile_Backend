@@ -24,4 +24,9 @@ public class AccountController {
     {
         return accountService.create(id,user);
     }
+    @PutMapping("/{email}")
+    public String changePassword(@PathVariable("email") String email,@RequestParam("newPassword") String newPassword)
+    {
+        return accountService.changePassword(email,newPassword);
+    }
 }

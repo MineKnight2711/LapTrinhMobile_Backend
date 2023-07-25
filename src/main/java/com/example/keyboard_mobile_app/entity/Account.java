@@ -18,14 +18,11 @@ import java.util.Date;
 public class Account {
     private String fullName;
     @Temporal(TemporalType.TIMESTAMP)
-    @Past(message = "Ngay Sinh phai nho hon ngay hien tai")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
-    private String accountType;
     private String email;
     private String gender;
     private String address;
-    private String nickname;
     private String imageUrl;
     private String phone;
 }

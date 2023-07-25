@@ -5,6 +5,9 @@ import com.example.keyboard_mobile_app.modules.account.dto.AccountResponseDto;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,8 @@ import java.util.concurrent.ExecutionException;
 public class AccountService {
     @Autowired
     private Firestore firestore;
-
+    @Autowired
+    private FirebaseAuth firebaseAuth;
     public AccountResponseDto getAccountById(String accountId) throws InterruptedException, ExecutionException {
         Firestore firestore = FirestoreClient.getFirestore();
 
@@ -53,5 +57,22 @@ public class AccountService {
         userMap.put("age", updatedUser.getBirthday());
         document.update(userMap).get();
         return updatedUser;
+    }
+    public String changePassword(String email,String newPassword) {
+        try {
+            UserRecord userRecord = firebaseAuth.getUserByEmail(email);
+
+            UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(userRecord.getUid())
+                    .setPassword(newPassword);
+
+            firebaseAuth.updateUser(request);
+
+            return "Password updated successfully.";
+        } catch (FirebaseAuthException e) {
+            // Handle exceptions (e.g., if old password is incorrect, or user doesn't exist)
+            e.printStackTrace();
+            return "Password updated failed.";
+        }
+
     }
 }
