@@ -1,6 +1,7 @@
 package com.example.keyboard_mobile_app.modules.account.service;
 
 import com.example.keyboard_mobile_app.entity.Account;
+import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.account.dto.AccountResponseDto;
 
 import com.google.api.core.ApiFuture;
@@ -21,7 +22,8 @@ public class AccountService {
     private Firestore firestore;
     @Autowired
     private FirebaseAuth firebaseAuth;
-    public AccountResponseDto getAccountById(String accountId) throws InterruptedException, ExecutionException {
+
+    public ResponseBase getAccountById(String accountId) throws InterruptedException, ExecutionException {
         Firestore firestore = FirestoreClient.getFirestore();
 
         // Specify the path to the account document in Firestore
@@ -30,49 +32,90 @@ public class AccountService {
         // Fetch the account document
         ApiFuture<DocumentSnapshot> future = docRef.get();
         DocumentSnapshot document = future.get();
-        AccountResponseDto account=new AccountResponseDto();
+        AccountResponseDto accountDto = new AccountResponseDto();
         if (document.exists()) {
             // Convert the document data to an AccountResponse object
-            account = document.toObject(AccountResponseDto.class);
-            account.setId(document.getId());
-            account.setStatus("Found!!!");
-            return account;
+            accountDto = document.toObject(AccountResponseDto.class);
+            accountDto.setId(document.getId());
+            return new ResponseBase(
+                    "User found!",
+                    accountDto
+            );
         } else {
             // Account with the specified ID not found
-            account.setStatus("Không tìm thấy tài khoản!");
-            return account;
+            return new ResponseBase(
+                    "User not found!",
+                    null
+            );
         }
     }
-    public Account create(String id,Account user) {
+    public ResponseBase create(String id,Account user) {
         CollectionReference collection = firestore.collection("users");
         DocumentReference document = collection.document(id);
         document.set(user);
-        return user;
+        return new ResponseBase(
+                "Create account successfully!",
+                null
+        );
     }
 
-    public Account update(String id, Account updatedUser) throws ExecutionException, InterruptedException {
+    public ResponseBase updateAccount(String id, Account updatedUser) throws ExecutionException, InterruptedException {
         DocumentReference document = firestore.collection("user").document(id);
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("name", updatedUser.getFullName());
         userMap.put("age", updatedUser.getBirthday());
         document.update(userMap).get();
-        return updatedUser;
+        return new ResponseBase(
+                "Update account successfully!",
+                null
+        );
     }
-    public String changePassword(String email,String newPassword) {
-        try {
-            UserRecord userRecord = firebaseAuth.getUserByEmail(email);
 
+    public ResponseBase changePassword(String email, String newPassword) {
+        try {
+            //Check tài khoản
+            UserRecord userRecord = firebaseAuth.getUserByEmail(email);
+            //tao request thay doi mat khau
             UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(userRecord.getUid())
                     .setPassword(newPassword);
-
+            //cap nhat tai khoan voi mat khau moi
             firebaseAuth.updateUser(request);
-
-            return "Password updated successfully.";
+            return new ResponseBase(
+                    "Đổi mật khẩu thành công !",
+                    null
+            );
         } catch (FirebaseAuthException e) {
-            // Handle exceptions (e.g., if old password is incorrect, or user doesn't exist)
             e.printStackTrace();
-            return "Password updated failed.";
+            return new ResponseBase(
+                    "ChangePasswordFailed",
+                    null
+            );
         }
+    }
 
+    public ResponseBase sendPasswordResetLink(String email) {
+        try {
+            // Check user email
+            UserRecord userRecord = firebaseAuth.getUserByEmail(email);
+            if(userRecord!=null){
+                // Generate the password reset link
+                String passwordResetLink = firebaseAuth.generatePasswordResetLink(email);
+                return new ResponseBase(
+                        "Password reset link: " + passwordResetLink,
+                        null
+                );
+            }
+            return new ResponseBase(
+                    "UserNotFound",
+                    null
+            );
+        } catch (FirebaseAuthException e) {
+            // Handle exceptions (e.g., if the user does not exist)
+            e.printStackTrace();
+            return new ResponseBase(
+                    "SendLinkFail",
+                    null
+            );
+        }
     }
 }

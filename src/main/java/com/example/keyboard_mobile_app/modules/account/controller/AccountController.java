@@ -1,6 +1,7 @@
 package com.example.keyboard_mobile_app.modules.account.controller;
 
 import com.example.keyboard_mobile_app.entity.Account;
+import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.account.dto.AccountResponseDto;
 import com.example.keyboard_mobile_app.modules.account.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +14,40 @@ import java.util.concurrent.ExecutionException;
 public class AccountController {
     @Autowired
     private AccountService accountService;
+
+    // Get Method
     @GetMapping("/{id}")
-    public AccountResponseDto getAccountById(@PathVariable("id") String id) throws ExecutionException, InterruptedException {
+    public ResponseBase getAccountById(@PathVariable("id") String id) throws ExecutionException, InterruptedException {
         return accountService.getAccountById(id);
     }
+
+    // Post Method
+
     @PostMapping("/{id}")
-    public Account createNewAccount(
+    public ResponseBase createNewAccount(
             @PathVariable("id") String id,
-            @ModelAttribute Account user)
+            @ModelAttribute Account user
+            )
     {
         return accountService.create(id,user);
     }
+
+    // Put Method
+
     @PutMapping("/{email}")
-    public String changePassword(@PathVariable("email") String email,@RequestParam("newPassword") String newPassword)
+    public ResponseBase changePassword(
+            @PathVariable("email") String email,
+            @RequestParam("newPassword") String newPassword
+            )
     {
-        return accountService.changePassword(email,newPassword);
+        return accountService.changePassword(email, newPassword);
+    }
+
+    @PostMapping("reset-password/{email}")
+    public ResponseBase resetPassword(
+            @PathVariable("email") String email
+    )
+    {
+        return accountService.sendPasswordResetLink(email);
     }
 }
