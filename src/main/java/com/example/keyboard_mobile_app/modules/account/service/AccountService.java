@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 public class AccountService {
     @Autowired
     private Firestore firestore;
+    @Autowired
     private FirebaseAuth firebaseAuth;
 
     public ResponseBase getAccountById(String accountId) throws InterruptedException, ExecutionException {
@@ -72,49 +73,49 @@ public class AccountService {
 
     public ResponseBase changePassword(String email, String newPassword) {
         try {
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-            System.out.println(email);
-            // Check if the user exists with the given email
-            UserRecord userRecord = auth.getUserByEmail(email);
-            // Update the user's password
-            //firebaseAuth.updateUser(userRecord.getUid(), new UserRecord.UpdateRequest().setPassword(newPassword));
-
-            System.out.println("Password changed successfully for user with email: ");
+            //Check tài khoản
+            UserRecord userRecord = firebaseAuth.getUserByEmail(email);
+            //tao request thay doi mat khau
+            UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(userRecord.getUid())
+                    .setPassword(newPassword);
+            //cap nhat tai khoan voi mat khau moi
+            firebaseAuth.updateUser(request);
+            return new ResponseBase(
+                    "Đổi mật khẩu thành công !",
+                    null
+            );
         } catch (FirebaseAuthException e) {
-            // Handle exceptions (e.g., if the user does not exist)
             e.printStackTrace();
             return new ResponseBase(
-                    "Password change failed",
+                    "ChangePasswordFailed",
                     null
             );
         }
-        return new ResponseBase(
-                "Password changed successfully",
-                null
-        );
     }
 
     public ResponseBase sendPasswordResetLink(String email) {
         try {
-            // Check if the user exists with the given email
+            // Check user email
             UserRecord userRecord = firebaseAuth.getUserByEmail(email);
-
-            // Generate the password reset link
-            String passwordResetLink = firebaseAuth.generatePasswordResetLink(email);
-
-            // You can send this link to the user via email or any other means
-            System.out.println("Password reset link: " + passwordResetLink);
+            if(userRecord!=null){
+                // Generate the password reset link
+                String passwordResetLink = firebaseAuth.generatePasswordResetLink(email);
+                return new ResponseBase(
+                        "Password reset link: " + passwordResetLink,
+                        null
+                );
+            }
+            return new ResponseBase(
+                    "UserNotFound",
+                    null
+            );
         } catch (FirebaseAuthException e) {
             // Handle exceptions (e.g., if the user does not exist)
             e.printStackTrace();
             return new ResponseBase(
-                    "Send Link Fail",
+                    "SendLinkFail",
                     null
             );
         }
-        return new ResponseBase(
-                "Send Link Success",
-                null
-        );
     }
 }

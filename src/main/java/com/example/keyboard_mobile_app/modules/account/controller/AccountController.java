@@ -34,12 +34,20 @@ public class AccountController {
 
     // Put Method
 
-    @PutMapping("/password")
+    @PutMapping("/{email}")
     public ResponseBase changePassword(
-            @RequestParam("email") String email,
+            @PathVariable("email") String email,
             @RequestParam("newPassword") String newPassword
-            ) {
-
+            )
+    {
         return accountService.changePassword(email, newPassword);
+    }
+
+    @PostMapping("reset-password/{email}")
+    public ResponseBase resetPassword(
+            @PathVariable("email") String email
+    )
+    {
+        return accountService.sendPasswordResetLink(email);
     }
 }

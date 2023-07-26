@@ -5,6 +5,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -48,5 +49,9 @@ public class FirebaseConfig {
         // Close the FileInputStream after creating the Firestore object
         serviceAccount.close();
         return firestore;
+    }
+    @Bean
+    public FirebaseAuth firebaseAuth() throws IOException {
+        return FirebaseAuth.getInstance(firebaseApp());
     }
 }
