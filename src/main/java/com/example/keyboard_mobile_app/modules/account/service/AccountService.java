@@ -81,7 +81,7 @@ public class AccountService {
             //cap nhat tai khoan voi mat khau moi
             firebaseAuth.updateUser(request);
             return new ResponseBase(
-                    "Đổi mật khẩu thành công !",
+                    "Success",
                     null
             );
         } catch (FirebaseAuthException e) {
@@ -101,7 +101,7 @@ public class AccountService {
                 // Generate the password reset link
                 String passwordResetLink = firebaseAuth.generatePasswordResetLink(email);
                 return new ResponseBase(
-                        "Password reset link: " + passwordResetLink,
+                        passwordResetLink,
                         null
                 );
             }

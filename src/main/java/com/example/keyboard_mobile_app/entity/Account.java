@@ -19,15 +19,9 @@ public class Account {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
-    private String accountType;
-
     private String email;
 
     private String gender;
-
-    private String address;
-
-    private String name;
 
     private String imageUrl;
 
