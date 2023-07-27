@@ -64,6 +64,9 @@ public class AccountService {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("name", updatedUser.getFullName());
         userMap.put("age", updatedUser.getBirthday());
+        userMap.put("birthday", updatedUser.getBirthday());
+        userMap.put("fullName", updatedUser.getFullName());
+        userMap.put("gender", updatedUser.getGender());
         document.update(userMap).get();
         return new ResponseBase(
                 "Update account successfully!",
@@ -87,7 +90,7 @@ public class AccountService {
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
             return new ResponseBase(
-                    "ChangePasswordFailed",
+                    "Đổi mật khẩu không thành công !",
                     null
             );
         }

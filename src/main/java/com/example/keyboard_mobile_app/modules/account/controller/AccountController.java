@@ -33,7 +33,6 @@ public class AccountController {
     }
 
     // Put Method
-
     @PutMapping("/{email}")
     public ResponseBase changePassword(
             @PathVariable("email") String email,
@@ -41,6 +40,13 @@ public class AccountController {
             )
     {
         return accountService.changePassword(email, newPassword);
+    }
+    @PutMapping("/info/{id}")
+    public ResponseBase updateInfo(
+            @PathVariable("id") String id,
+            @ModelAttribute() Account account
+        ) throws ExecutionException, InterruptedException {
+        return accountService.updateAccount(id, account);
     }
 
     @PostMapping("reset-password/{email}")
