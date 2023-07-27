@@ -1,4 +1,5 @@
 package com.example.keyboard_mobile_app.entity;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
@@ -10,13 +11,11 @@ import java.util.Date;
 @Data
 @Getter
 @Setter
-
 public class Account {
 
     private String fullName;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Past(message = "Ngay Sinh phai nho hon ngay hien tai")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 

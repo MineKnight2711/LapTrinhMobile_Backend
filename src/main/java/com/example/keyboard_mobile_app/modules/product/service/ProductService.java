@@ -51,7 +51,6 @@ public class ProductService {
         List<String> productImageList = new ArrayList<>();
         //List<String> imageUrls = uploadImageService.uploadImage(dto.imageFile,"productImage/", dto.name);
 
-        String urlImageThumb = null;
         if (displayImage != null) {
             List<String> displayUrl = uploadImageService.uploadFiles(images);
             if (!displayUrl.isEmpty()) {
