@@ -63,6 +63,9 @@ public class AccountService {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("name", updatedUser.getFullName());
         userMap.put("age", updatedUser.getBirthday());
+        userMap.put("birthday", updatedUser.getBirthday());
+        userMap.put("fullName", updatedUser.getName());
+        userMap.put("gender", updatedUser.getGender());
         document.update(userMap).get();
         return new ResponseBase(
                 "Update account successfully!",
@@ -73,12 +76,11 @@ public class AccountService {
     public ResponseBase changePassword(String email, String newPassword) {
         try {
             FirebaseAuth auth = FirebaseAuth.getInstance();
-            System.out.println(email);
             // Check if the user exists with the given email
             UserRecord userRecord = auth.getUserByEmail(email);
             // Update the user's password
-            //firebaseAuth.updateUser(userRecord.getUid(), new UserRecord.UpdateRequest().setPassword(newPassword));
-
+            UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(userRecord.getUid()).setPassword(newPassword);
+            auth.updateUser(request);
             System.out.println("Password changed successfully for user with email: ");
         } catch (FirebaseAuthException e) {
             // Handle exceptions (e.g., if the user does not exist)

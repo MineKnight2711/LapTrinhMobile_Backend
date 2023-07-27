@@ -26,8 +26,6 @@ public class Account {
 
     private String gender;
 
-    private String address;
-
     private String name;
 
     private String imageUrl;

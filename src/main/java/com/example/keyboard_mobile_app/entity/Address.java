@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class Address {
 
-    public String account;
+    public String accountId;
 
     public String address;
 }

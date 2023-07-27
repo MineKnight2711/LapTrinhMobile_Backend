@@ -22,7 +22,6 @@ public class AccountController {
     }
 
     // Post Method
-
     @PostMapping("/{id}")
     public ResponseBase createNewAccount(
             @PathVariable("id") String id,
@@ -33,7 +32,6 @@ public class AccountController {
     }
 
     // Put Method
-
     @PutMapping("/password")
     public ResponseBase changePassword(
             @RequestParam("email") String email,
@@ -41,5 +39,12 @@ public class AccountController {
             ) {
 
         return accountService.changePassword(email, newPassword);
+    }
+    @PutMapping("/info/{id}")
+    public ResponseBase updateInfo(
+            @PathVariable("id") String id,
+            @ModelAttribute() Account account
+        ) throws ExecutionException, InterruptedException {
+        return accountService.updateAccount(id, account);
     }
 }
