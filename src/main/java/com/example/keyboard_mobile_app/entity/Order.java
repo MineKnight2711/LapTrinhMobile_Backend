@@ -14,6 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class Order {
+    public String orderId;
     public String account;
 
     public String address;

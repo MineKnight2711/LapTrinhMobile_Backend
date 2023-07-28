@@ -13,6 +13,8 @@ import java.util.Date;
 @Setter
 public class Account {
 
+    private String accountId;
+
     private String fullName;
 
     @Temporal(TemporalType.TIMESTAMP)

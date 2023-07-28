@@ -28,86 +28,108 @@ public class ProductService {
     private Firestore firestore;
     @Autowired
     private UploadImageService uploadImageService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private BrandService brandService;
-    public ResponseBase createProduct(MultipartFile[] displayImage, MultipartFile[] images, ProductDto dto) throws IOException {
+    public ResponseBase createProduct(MultipartFile[] displayImage, ProductDto dto) throws IOException {
         CollectionReference collection = firestore.collection("product");
 
         // set product
         Product product = new Product();
-        product.setProductName(dto.name);
-        product.setPrice(dto.price);
-        product.setQuantity(dto.quantity);
-        product.setUnit(dto.unit);
-        product.setDescription(dto.description);
-
-        // get url display image
-        //String displayUrl= uploadImageService.uploadImage(dto.displayFile,"productImage/", dto.name);
-        //product.setDisplayUrl(displayUrl);
-
-        // get url images
+        product.setProductName(dto.getProductName());
+        product.setUnit(dto.getUnit());
+        product.setDescription(dto.getDescription());
         List<String> productImageList = new ArrayList<>();
-        //List<String> imageUrls = uploadImageService.uploadImage(dto.imageFile,"productImage/", dto.name);
-
         if (displayImage != null) {
-            List<String> displayUrl = uploadImageService.uploadFiles(images);
+            List<String> displayUrl = uploadImageService.uploadFiles(displayImage);
             if (!displayUrl.isEmpty()) {
                 product.setDisplayUrl(displayUrl.get(0));
             }
         }
-
-        List<String> lstImage = new ArrayList<>();
-        String descriptionImageLists = null;
-        if (images != null) {
-            List<String> imageUrls = uploadImageService.uploadFiles(images);
-            lstImage.addAll(imageUrls);
-            descriptionImageLists = new Gson().toJson(productImageList);
-            product.setImageUrl(descriptionImageLists);
-        }
-        product.setBrand(dto.brandId);
+        product.setCategory(dto.getCategoryId());
+        product.setBrand(dto.getBrandId());
         DocumentReference document = collection.document();
         product.setProductId(document.getId());
         document.set(product);
         return new ResponseBase(
-                "Create brand succesfully!",
+                "Create product succesfully!",
                 product
-        );
-    }
-
-    public ResponseBase updateBrand(String brandId, String brandNameUpdate) throws ExecutionException, InterruptedException {
-        DocumentReference document = firestore.collection("brand").document(brandId);
-        Map<String, Object> brandMap = new HashMap<>();
-        brandMap.put("brandName", brandNameUpdate);
-        document.update(brandMap).get();
-        return new ResponseBase(
-                "Update Brand successfully!",
-                brandMap
         );
     }
 
     public ResponseBase getList() throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
-        CollectionReference colRef = firestore.collection("brand");
+        CollectionReference colRef = firestore.collection("product");
         ApiFuture<QuerySnapshot> future = colRef.get();
         QuerySnapshot snapshot = future.get();
-        List<Brand> lstBrand = new ArrayList<>();
+        List<Product> lstProduct = new ArrayList<>();
         for (DocumentSnapshot document : snapshot.getDocuments()) {
             if (document.exists()) {
-                Brand brand = document.toObject(Brand.class);
-                brand.setBrandID(document.getId());
-                lstBrand.add(brand);
+                Product product = document.toObject(Product.class);
+                product.setProductId(document.getId());
+                lstProduct.add(product);
             }
         }
-        if (!lstBrand.isEmpty()) {
+        if (!lstProduct.isEmpty()) {
             return new ResponseBase(
-                    "Get List Brand",
-                    lstBrand
+                    "Get List Product",
+                    lstProduct
             );
         } else {
             return new ResponseBase(
-                    "No brands found!",
+                    "No product found!",
+                    null
+            );
+        }
+    }
+
+    public ResponseBase getByCategoryId(String categoryId) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        CollectionReference colRef = firestore.collection("product");
+        ApiFuture<QuerySnapshot> future = colRef.get();
+        QuerySnapshot snapshot = future.get();
+        List<Product> lstProduct = new ArrayList<>();
+        for (DocumentSnapshot document : snapshot.getDocuments()) {
+            if (document.exists()) {
+                Product product = document.toObject(Product.class);
+                product.setProductId(document.getId());
+                System.out.println(product.getCategory().toString());
+                System.out.println(categoryId);
+                if(product.getCategory().equals(categoryId))
+                    lstProduct.add(product);
+            }
+        }
+        if (!lstProduct.isEmpty()) {
+            return new ResponseBase(
+                    "Get List Product By Category",
+                    lstProduct
+            );
+        } else {
+            return new ResponseBase(
+                    "No product found!",
+                    null
+            );
+        }
+    }
+    public ResponseBase getByBrand(String brandId) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        CollectionReference colRef = firestore.collection("product");
+        ApiFuture<QuerySnapshot> future = colRef.get();
+        QuerySnapshot snapshot = future.get();
+        List<Product> lstProduct = new ArrayList<>();
+        for (DocumentSnapshot document : snapshot.getDocuments()) {
+            if (document.exists()) {
+                Product product = document.toObject(Product.class);
+                product.setProductId(document.getId());
+                if(product.getBrand().equals(brandId))
+                    lstProduct.add(product);
+            }
+        }
+        if (!lstProduct.isEmpty()) {
+            return new ResponseBase(
+                    "Get List Product By Brand",
+                    lstProduct
+            );
+        } else {
+            return new ResponseBase(
+                    "No product found!",
                     null
             );
         }
