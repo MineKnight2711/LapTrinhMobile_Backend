@@ -58,12 +58,11 @@ public class UploadImageService {
     }
 
     public List<String> uploadFiles(MultipartFile[] files) throws IOException {
-        Storage storage = StorageOptions.getDefaultInstance().getService();
         String bucketName = "keyboard-mobile-app.appspot.com";
         List<String> urls = new ArrayList<>();
         for (MultipartFile file : files) {
             String filename = String.format("%d-%s", System.currentTimeMillis(), file.getOriginalFilename()).replaceAll(" ", "+");
-            BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, filename)
+            BlobInfo blobInfo = BlobInfo.newBuilder(bucketName , "productImage/" + filename)
                     .setContentType(file.getContentType())
                     .setAcl(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.OWNER)))
                     .build();

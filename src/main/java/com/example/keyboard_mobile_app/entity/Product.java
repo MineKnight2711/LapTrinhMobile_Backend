@@ -12,7 +12,7 @@ public class Product {
 
     public String productName;
 
-    public int price;
+    public String price;
 
     public int quantity;
 
@@ -21,8 +21,6 @@ public class Product {
     public String description;
 
     public String displayUrl;
-
-    public String imageUrl;
 
     public String category;
 

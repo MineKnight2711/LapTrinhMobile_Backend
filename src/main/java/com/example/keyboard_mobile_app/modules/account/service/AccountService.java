@@ -52,6 +52,7 @@ public class AccountService {
     public ResponseBase create(String id,Account user) {
         CollectionReference collection = firestore.collection("users");
         DocumentReference document = collection.document(id);
+        user.setAccountId(document.getId());
         document.set(user);
         return new ResponseBase(
                 "Create account successfully!",

@@ -13,13 +13,13 @@ import java.util.Date;
 @Setter
 public class Account {
 
+    private String accountId;
+
     private String fullName;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
-
-    private String accountType;
 
     private String email;
 

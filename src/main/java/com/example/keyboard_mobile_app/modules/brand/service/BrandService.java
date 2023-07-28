@@ -24,6 +24,7 @@ public class BrandService {
         Brand brand = new Brand();
         brand.setBrandName(brandName);
         DocumentReference document = collection.document();
+        brand.setBrandID(document.getId());
         document.set(brand);
         return new ResponseBase(
                 "Create brand succesfully!",

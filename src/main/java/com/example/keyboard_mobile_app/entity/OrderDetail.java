@@ -8,9 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderDetail {
-    public String product;
+    public String orderId;
 
-    public String order;
+    public String productDetailId;
 
     public int quantity;
 
