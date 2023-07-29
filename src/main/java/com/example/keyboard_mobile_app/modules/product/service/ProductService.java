@@ -36,7 +36,6 @@ public class ProductService {
         product.setProductName(dto.getProductName());
         product.setUnit(dto.getUnit());
         product.setDescription(dto.getDescription());
-        List<String> productImageList = new ArrayList<>();
         if (displayImage != null) {
             List<String> displayUrl = uploadImageService.uploadFiles(displayImage);
             if (!displayUrl.isEmpty()) {

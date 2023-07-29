@@ -16,4 +16,4 @@ public class AccountResponseDto {
     private String email;
     private String gender;
     private Date birthday;
-    private String accountType;
+}
