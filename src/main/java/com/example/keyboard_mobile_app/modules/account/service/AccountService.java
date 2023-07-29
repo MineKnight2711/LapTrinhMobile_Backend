@@ -66,7 +66,7 @@ public class AccountService {
         userMap.put("name", updatedUser.getFullName());
         userMap.put("age", updatedUser.getBirthday());
         userMap.put("birthday", updatedUser.getBirthday());
-        userMap.put("fullName", updatedUser.getName());
+        userMap.put("fullName", updatedUser.getFullName());
         userMap.put("gender", updatedUser.getGender());
         document.update(userMap).get();
         return new ResponseBase(
@@ -85,7 +85,7 @@ public class AccountService {
             //cap nhat tai khoan voi mat khau moi
             firebaseAuth.updateUser(request);
             return new ResponseBase(
-                    "Đổi mật khẩu thành công !",
+                    "Success",
                     null
             );
         } catch (FirebaseAuthException e) {
@@ -105,7 +105,7 @@ public class AccountService {
                 // Generate the password reset link
                 String passwordResetLink = firebaseAuth.generatePasswordResetLink(email);
                 return new ResponseBase(
-                        "Password reset link: " + passwordResetLink,
+                        passwordResetLink,
                         null
                 );
             }

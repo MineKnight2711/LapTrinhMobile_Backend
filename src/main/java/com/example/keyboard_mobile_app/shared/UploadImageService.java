@@ -62,7 +62,7 @@ public class UploadImageService {
         List<String> urls = new ArrayList<>();
         for (MultipartFile file : files) {
             String filename = String.format("%d-%s", System.currentTimeMillis(), file.getOriginalFilename()).replaceAll(" ", "+");
-            BlobInfo blobInfo = BlobInfo.newBuilder(bucketName , "productImage/" + filename)
+            BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, "productImage/"+filename)
                     .setContentType(file.getContentType())
                     .setAcl(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.OWNER)))
                     .build();
