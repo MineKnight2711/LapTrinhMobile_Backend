@@ -27,7 +27,7 @@ public class AccountService {
         Firestore firestore = FirestoreClient.getFirestore();
 
         // Specify the path to the account document in Firestore
-        DocumentReference docRef = firestore.collection("users").document(accountId);
+        DocumentReference docRef = firestore.collection("accounts").document(accountId);
 
         // Fetch the account document
         ApiFuture<DocumentSnapshot> future = docRef.get();
@@ -50,7 +50,7 @@ public class AccountService {
         }
     }
     public ResponseBase create(String id,Account user) {
-        CollectionReference collection = firestore.collection("users");
+        CollectionReference collection = firestore.collection("accounts");
         DocumentReference document = collection.document(id);
         user.setAccountId(document.getId());
         document.set(user);
@@ -61,10 +61,9 @@ public class AccountService {
     }
 
     public ResponseBase updateAccount(String id, Account updatedUser) throws ExecutionException, InterruptedException {
-        DocumentReference document = firestore.collection("user").document(id);
+        DocumentReference document = firestore.collection("accounts").document(id);
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put("name", updatedUser.getFullName());
-        userMap.put("age", updatedUser.getBirthday());
+        userMap.put("phone", updatedUser.getPhone());
         userMap.put("birthday", updatedUser.getBirthday());
         userMap.put("fullName", updatedUser.getFullName());
         userMap.put("gender", updatedUser.getGender());
