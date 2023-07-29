@@ -32,14 +32,14 @@ public class AccountService {
         // Fetch the account document
         ApiFuture<DocumentSnapshot> future = docRef.get();
         DocumentSnapshot document = future.get();
-        AccountResponseDto accountDto = new AccountResponseDto();
+        Account result = new Account();
         if (document.exists()) {
             // Convert the document data to an AccountResponse object
-            accountDto = document.toObject(AccountResponseDto.class);
-            accountDto.setId(document.getId());
+            result = document.toObject(Account.class);
+            result.setAccountId(document.getId());
             return new ResponseBase(
                     "User found!",
-                    accountDto
+                    result
             );
         } else {
             // Account with the specified ID not found
