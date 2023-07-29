@@ -61,10 +61,9 @@ public class AccountService {
     }
 
     public ResponseBase updateAccount(String id, Account updatedUser) throws ExecutionException, InterruptedException {
-        DocumentReference document = firestore.collection("user").document(id);
+        DocumentReference document = firestore.collection("accounts").document(id);
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put("name", updatedUser.getFullName());
-        userMap.put("age", updatedUser.getBirthday());
+        userMap.put("phone", updatedUser.getPhone());
         userMap.put("birthday", updatedUser.getBirthday());
         userMap.put("fullName", updatedUser.getFullName());
         userMap.put("gender", updatedUser.getGender());
