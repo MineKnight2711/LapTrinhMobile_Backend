@@ -12,8 +12,6 @@ public class Product {
 
     public String productName;
 
-    public String price;
-
     public int quantity;
 
     public String unit;

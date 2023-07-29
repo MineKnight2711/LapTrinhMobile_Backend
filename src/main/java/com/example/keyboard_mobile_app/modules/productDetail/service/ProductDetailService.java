@@ -39,6 +39,7 @@ public class ProductDetailService {
             descriptionImageLists = new Gson().toJson(lstImage);
             result.setImageUrl(descriptionImageLists);
         }
+        document.set(result);
         return new ResponseBase(
                 "Create product detail successfully!",
                 result
