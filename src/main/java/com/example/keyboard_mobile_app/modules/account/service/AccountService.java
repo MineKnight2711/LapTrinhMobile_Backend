@@ -32,13 +32,14 @@ public class AccountService {
         // Fetch the account document
         ApiFuture<DocumentSnapshot> future = docRef.get();
         DocumentSnapshot document = future.get();
-        AccountResponseDto accountDto = new AccountResponseDto();
+        Account result = new Account();
         if (document.exists()) {
             // Convert the document data to an AccountResponse object
-            accountDto = document.toObject(AccountResponseDto.class);
+            result = document.toObject(Account.class);
+            result.setAccountId(document.getId());
             return new ResponseBase(
                     "User found!",
-                    accountDto
+                    result
             );
         } else {
             // Account with the specified ID not found
@@ -67,7 +68,6 @@ public class AccountService {
         userMap.put("fullName", updatedUser.getFullName());
         userMap.put("gender", updatedUser.getGender());
         document.update(userMap).get();
-
         return new ResponseBase(
                 "Success",
                 null
