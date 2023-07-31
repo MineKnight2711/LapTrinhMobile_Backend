@@ -36,7 +36,6 @@ public class AccountService {
         if (document.exists()) {
             // Convert the document data to an AccountResponse object
             accountDto = document.toObject(AccountResponseDto.class);
-            accountDto.setId(document.getId());
             return new ResponseBase(
                     "User found!",
                     accountDto
@@ -68,6 +67,7 @@ public class AccountService {
         userMap.put("fullName", updatedUser.getFullName());
         userMap.put("gender", updatedUser.getGender());
         document.update(userMap).get();
+
         return new ResponseBase(
                 "Success",
                 null
