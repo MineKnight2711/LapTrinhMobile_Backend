@@ -27,19 +27,19 @@ public class AccountService {
         Firestore firestore = FirestoreClient.getFirestore();
 
         // Specify the path to the account document in Firestore
-        DocumentReference docRef = firestore.collection("users").document(accountId);
+        DocumentReference docRef = firestore.collection("accounts").document(accountId);
 
         // Fetch the account document
         ApiFuture<DocumentSnapshot> future = docRef.get();
         DocumentSnapshot document = future.get();
-        AccountResponseDto accountDto = new AccountResponseDto();
+        Account result = new Account();
         if (document.exists()) {
             // Convert the document data to an AccountResponse object
-            accountDto = document.toObject(AccountResponseDto.class);
-            accountDto.setId(document.getId());
+            result = document.toObject(Account.class);
+            result.setAccountId(document.getId());
             return new ResponseBase(
                     "User found!",
-                    accountDto
+                    result
             );
         } else {
             // Account with the specified ID not found
@@ -50,8 +50,9 @@ public class AccountService {
         }
     }
     public ResponseBase create(String id,Account user) {
-        CollectionReference collection = firestore.collection("users");
+        CollectionReference collection = firestore.collection("accounts");
         DocumentReference document = collection.document(id);
+        user.setAccountId(document.getId());
         document.set(user);
         return new ResponseBase(
                 "Create account successfully!",
@@ -60,13 +61,15 @@ public class AccountService {
     }
 
     public ResponseBase updateAccount(String id, Account updatedUser) throws ExecutionException, InterruptedException {
-        DocumentReference document = firestore.collection("user").document(id);
+        DocumentReference document = firestore.collection("accounts").document(id);
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put("name", updatedUser.getFullName());
-        userMap.put("age", updatedUser.getBirthday());
+        userMap.put("phone", updatedUser.getPhone());
+        userMap.put("birthday", updatedUser.getBirthday());
+        userMap.put("fullName", updatedUser.getFullName());
+        userMap.put("gender", updatedUser.getGender());
         document.update(userMap).get();
         return new ResponseBase(
-                "Update account successfully!",
+                "Success",
                 null
         );
     }
@@ -81,13 +84,13 @@ public class AccountService {
             //cap nhat tai khoan voi mat khau moi
             firebaseAuth.updateUser(request);
             return new ResponseBase(
-                    "Đổi mật khẩu thành công !",
+                    "Success",
                     null
             );
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
             return new ResponseBase(
-                    "ChangePasswordFailed",
+                    "Đổi mật khẩu không thành công !",
                     null
             );
         }
@@ -101,7 +104,7 @@ public class AccountService {
                 // Generate the password reset link
                 String passwordResetLink = firebaseAuth.generatePasswordResetLink(email);
                 return new ResponseBase(
-                        "Password reset link: " + passwordResetLink,
+                        passwordResetLink,
                         null
                 );
             }

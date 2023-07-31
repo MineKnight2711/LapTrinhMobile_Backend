@@ -9,13 +9,11 @@ import java.util.Date;
 @Getter
 @Setter
 public class AccountResponseDto {
-    private String id;
+    private String accountId;
     private String imageUrl;
-    private String userName;
     private String fullName;
     private String phone;
     private String email;
     private String gender;
     private Date birthday;
-    private String accountType;
 }

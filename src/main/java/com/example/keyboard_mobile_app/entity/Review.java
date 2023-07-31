@@ -15,6 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class Review {
+    public String reviewId;
     public String account;
 
     public String product;
