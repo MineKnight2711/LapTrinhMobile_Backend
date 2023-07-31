@@ -8,13 +8,26 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/productDetail")
 public class ProductDetailController {
     @Autowired
     private ProductDetailService productDetailService;
+    //Get Method
+    @GetMapping()
+    public ResponseBase getListProductDetail() throws ExecutionException, InterruptedException {
+        return productDetailService.getListProduct();
+    }
+    @GetMapping("/listProduct/{productId}")
+    public ResponseBase getListByProductId(
+            @PathVariable("productId") String productId
+    ) throws ExecutionException, InterruptedException {
+        return productDetailService.getListByProductId(productId);
+    }
 
+    //Post Method
     @PostMapping("/create")
     private ResponseBase createProductDetail(
             @ModelAttribute ProductDetail productDetail,
