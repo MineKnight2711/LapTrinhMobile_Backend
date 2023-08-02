@@ -22,6 +22,10 @@ public class ProductController {
     public ResponseBase getList() throws ExecutionException, InterruptedException {
         return productService.getList();
     }
+    @GetMapping("/getById/{id}")
+    public ResponseBase getById(@PathVariable("id") String id) throws ExecutionException, InterruptedException {
+        return productService.getById(id);
+    }
     @GetMapping("/category/{categoryId}")
     public ResponseBase getByCategory(
             @PathVariable("categoryId") String categoryId

@@ -1,5 +1,6 @@
 package com.example.keyboard_mobile_app.modules.productDetail.service;
 
+import com.example.keyboard_mobile_app.entity.Product;
 import com.example.keyboard_mobile_app.entity.ProductDetail;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.shared.UploadImageService;
@@ -46,7 +47,32 @@ public class ProductDetailService {
                 result
         );
     }
+    public ResponseBase getById(String id) throws InterruptedException, ExecutionException {
+        Firestore firestore = FirestoreClient.getFirestore();
 
+        // Specify the path to the account document in Firestore
+        DocumentReference docRef = firestore.collection("productDetail").document(id);
+
+        // Fetch the account document
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = future.get();
+        ProductDetail result = new ProductDetail();
+        if (document.exists()) {
+            // Convert the document data to an AccountResponse object
+            result = document.toObject(ProductDetail.class);
+            result.setProductDetailId(document.getId());
+            return new ResponseBase(
+                    "Product detail found!",
+                    result
+            );
+        } else {
+            // Account with the specified ID not found
+            return new ResponseBase(
+                    "Product detail not found!",
+                    null
+            );
+        }
+    }
     public ResponseBase getListProduct() throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         CollectionReference colRef = firestore.collection("productDetail");

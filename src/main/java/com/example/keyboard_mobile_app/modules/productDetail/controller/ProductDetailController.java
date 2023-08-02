@@ -15,10 +15,15 @@ import java.util.concurrent.ExecutionException;
 public class ProductDetailController {
     @Autowired
     private ProductDetailService productDetailService;
+
     //Get Method
     @GetMapping()
     public ResponseBase getListProductDetail() throws ExecutionException, InterruptedException {
         return productDetailService.getListProduct();
+    }
+    @GetMapping("/getById/{id}")
+    public ResponseBase getById(@PathVariable("id") String id) throws ExecutionException, InterruptedException {
+        return productDetailService.getById(id);
     }
     @GetMapping("/listProduct/{productId}")
     public ResponseBase getListByProductId(

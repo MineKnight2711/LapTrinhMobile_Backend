@@ -1,5 +1,6 @@
 package com.example.keyboard_mobile_app.modules.product.service;
 
+import com.example.keyboard_mobile_app.entity.Account;
 import com.example.keyboard_mobile_app.entity.Brand;
 import com.example.keyboard_mobile_app.entity.Product;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
@@ -78,7 +79,32 @@ public class ProductService {
             );
         }
     }
+    public ResponseBase getById(String id) throws InterruptedException, ExecutionException {
+        Firestore firestore = FirestoreClient.getFirestore();
 
+        // Specify the path to the account document in Firestore
+        DocumentReference docRef = firestore.collection("product").document(id);
+
+        // Fetch the account document
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = future.get();
+        Product result = new Product();
+        if (document.exists()) {
+            // Convert the document data to an AccountResponse object
+            result = document.toObject(Product.class);
+            result.setProductId(document.getId());
+            return new ResponseBase(
+                    "Product found!",
+                    result
+            );
+        } else {
+            // Account with the specified ID not found
+            return new ResponseBase(
+                    "Product not found!",
+                    null
+            );
+        }
+    }
     public ResponseBase getByCategoryId(String categoryId) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         CollectionReference colRef = firestore.collection("product");
