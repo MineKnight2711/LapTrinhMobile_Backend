@@ -30,7 +30,14 @@ public class CartController {
     ) throws ExecutionException, InterruptedException {
         return cartService.addToCart(accountId, productDetailId, quantity);
     }
-
+    @PutMapping("/update/{accountId}")
+    public ResponseBase updateCart(
+            @PathVariable("accountId") String accountId,
+            @RequestParam("productDetailId") String productDetailId,
+            @RequestParam("quantity") int quantity
+    ) throws ExecutionException, InterruptedException {
+        return cartService.updateCart(accountId, productDetailId, quantity);
+    }
     //Delete Method
     @DeleteMapping("/delete/{accountId}")
     public ResponseBase deleteCart(
@@ -38,5 +45,11 @@ public class CartController {
             @RequestParam("productDetailId") String productDetailId
     ) throws ExecutionException, InterruptedException {
         return cartService.deleteCart(accountId, productDetailId);
+    }
+    @DeleteMapping("/clear-cart/{accountId}")
+    public ResponseBase clearCart(
+            @PathVariable("accountId") String accountId
+    ) throws ExecutionException, InterruptedException {
+        return cartService.clearCart(accountId);
     }
 }

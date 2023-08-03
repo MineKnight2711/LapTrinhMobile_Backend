@@ -77,12 +77,51 @@ public class CartService {
             );
         }
     }
+    public ResponseBase updateCart(String accountId, String productDetailId, int updatedQuantity) throws ExecutionException, InterruptedException{
+        CollectionReference collection = firestore.collection("cart");
+        ApiFuture<QuerySnapshot> future = collection.whereEqualTo("accountId", accountId)
+                .whereEqualTo("productDetailId", productDetailId)
+                .get();
+        QuerySnapshot snapshot = future.get();
+        if(!snapshot.isEmpty()){
+            DocumentSnapshot documentSnapshot = snapshot.getDocuments().get(0);
+            String cartId = documentSnapshot.getId();
+
+            // Update the cart quantity using the cart document ID
+            DocumentReference cartReference = collection.document(cartId);
+            Map<String, Object> updateData = new HashMap<>();
+            updateData.put("quantity", updatedQuantity);
+            cartReference.update(updateData);
+            return new ResponseBase(
+                    "Update cart Successfully!",
+                    null
+            );
+        }
+        return new ResponseBase(
+                "Update cart fail!!",
+                null
+        );
+    }
 
     public ResponseBase deleteCart(String accountId, String productDetailId) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         CollectionReference colRef = firestore.collection("cart");
         Query query = colRef.whereEqualTo("accountId", accountId)
                 .whereEqualTo("productDetailId", productDetailId);
+        ApiFuture<QuerySnapshot> future = query.get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (QueryDocumentSnapshot document : documents) {
+            document.getReference().delete();
+        }
+        return new ResponseBase(
+                "Delete Cart Successfully!",
+                null
+        );
+    }
+    public ResponseBase clearCart(String accountId) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        CollectionReference colRef = firestore.collection("cart");
+        Query query = colRef.whereEqualTo("accountId", accountId);
         ApiFuture<QuerySnapshot> future = query.get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (QueryDocumentSnapshot document : documents) {

@@ -31,7 +31,12 @@ public class ProductDetailController {
     ) throws ExecutionException, InterruptedException {
         return productDetailService.getListByProductId(productId);
     }
-
+    @DeleteMapping("/{detailId}")
+    public ResponseBase deleteDetail(
+            @PathVariable("detailId") String detailId
+    ) throws ExecutionException, InterruptedException {
+        return productDetailService.deleteDetail(detailId);
+    }
     //Post Method
     @PostMapping("/create")
     private ResponseBase createProductDetail(

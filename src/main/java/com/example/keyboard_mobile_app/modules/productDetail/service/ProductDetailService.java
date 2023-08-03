@@ -97,6 +97,27 @@ public class ProductDetailService {
             );
         }
     }
+    public ResponseBase deleteDetail(String id) throws InterruptedException, ExecutionException {
+        Firestore firestore = FirestoreClient.getFirestore();
+
+        // Specify the path to the account document in Firestore
+        DocumentReference docRef = firestore.collection("productDetail").document(id);
+
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = future.get();
+        if (document.exists()) {
+            docRef.delete();
+            return new ResponseBase(
+                    "Product details deleted!",
+                    null
+            );
+        } else {
+            return new ResponseBase(
+                    "Product detail not found!",
+                    null
+            );
+        }
+    }
     public ResponseBase getListByProductId(String productId) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         CollectionReference colRef = firestore.collection("productDetail");
