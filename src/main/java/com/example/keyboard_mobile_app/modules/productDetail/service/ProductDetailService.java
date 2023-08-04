@@ -1,4 +1,5 @@
 package com.example.keyboard_mobile_app.modules.productDetail.service;
+
 import com.example.keyboard_mobile_app.Entity.ProductDetail;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.shared.UploadImageService;
@@ -36,7 +37,7 @@ public class ProductDetailService {
         if (displayImage != null) {
             List<String> imageUrls = uploadImageService.uploadFiles(displayImage);
             lstImage.addAll(imageUrls);
-            descriptionImageLists = lstImage.toString();
+            descriptionImageLists = new Gson().toJson(lstImage);
             result.setImageUrl(descriptionImageLists);
         }
         document.set(result);
@@ -45,7 +46,32 @@ public class ProductDetailService {
                 result
         );
     }
+    public ResponseBase getById(String id) throws InterruptedException, ExecutionException {
+        Firestore firestore = FirestoreClient.getFirestore();
 
+        // Specify the path to the account document in Firestore
+        DocumentReference docRef = firestore.collection("productDetail").document(id);
+
+        // Fetch the account document
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = future.get();
+        ProductDetail result = new ProductDetail();
+        if (document.exists()) {
+            // Convert the document data to an AccountResponse object
+            result = document.toObject(ProductDetail.class);
+            result.setProductDetailId(document.getId());
+            return new ResponseBase(
+                    "Product detail found!",
+                    result
+            );
+        } else {
+            // Account with the specified ID not found
+            return new ResponseBase(
+                    "Product detail not found!",
+                    null
+            );
+        }
+    }
     public ResponseBase getListProduct() throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         CollectionReference colRef = firestore.collection("productDetail");
@@ -66,6 +92,27 @@ public class ProductDetailService {
         } else {
             return new ResponseBase(
                     "No Product found!",
+                    null
+            );
+        }
+    }
+    public ResponseBase deleteDetail(String id) throws InterruptedException, ExecutionException {
+        Firestore firestore = FirestoreClient.getFirestore();
+
+        // Specify the path to the account document in Firestore
+        DocumentReference docRef = firestore.collection("productDetail").document(id);
+
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = future.get();
+        if (document.exists()) {
+            docRef.delete();
+            return new ResponseBase(
+                    "Product details deleted!",
+                    null
+            );
+        } else {
+            return new ResponseBase(
+                    "Product detail not found!",
                     null
             );
         }

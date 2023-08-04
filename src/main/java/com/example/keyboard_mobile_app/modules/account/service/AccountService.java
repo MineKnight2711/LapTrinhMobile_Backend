@@ -69,7 +69,7 @@ public class AccountService {
         userMap.put("gender", updatedUser.getGender());
         document.update(userMap).get();
         return new ResponseBase(
-                "Update account successfully!",
+                "Success",
                 null
         );
     }
