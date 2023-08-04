@@ -1,4 +1,4 @@
-package com.example.keyboard_mobile_app.entity;
+package com.example.keyboard_mobile_app.Entity;
 
 import lombok.Data;
 import lombok.Getter;

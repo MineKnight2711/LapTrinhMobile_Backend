@@ -1,6 +1,5 @@
 package com.example.keyboard_mobile_app.modules.productDetail.service;
-
-import com.example.keyboard_mobile_app.entity.ProductDetail;
+import com.example.keyboard_mobile_app.Entity.ProductDetail;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.shared.UploadImageService;
 import com.google.api.core.ApiFuture;
@@ -37,7 +36,7 @@ public class ProductDetailService {
         if (displayImage != null) {
             List<String> imageUrls = uploadImageService.uploadFiles(displayImage);
             lstImage.addAll(imageUrls);
-            descriptionImageLists = new Gson().toJson(lstImage);
+            descriptionImageLists = lstImage.toString();
             result.setImageUrl(descriptionImageLists);
         }
         document.set(result);
