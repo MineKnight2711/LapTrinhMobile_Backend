@@ -20,7 +20,6 @@ public class Account {
     private Date birthday;
 
     private String email;
-    private boolean isFingerPrintAuthentication;
 
     private String gender;
 
