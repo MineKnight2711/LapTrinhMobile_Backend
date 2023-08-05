@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -18,13 +20,16 @@ public class AddressService {
     @Autowired
     private Firestore firestore;
 
-    public ResponseBase createAddress(String accountId, String address) {
+    public ResponseBase createAddress(String accountId, Address address) {
         CollectionReference collection = firestore.collection("address");
         DocumentReference document = collection.document();
         Address result = new Address();
         result.setAddressId(document.getId());
-        result.setAddress(address);
+        result.setAddress(address.getAddress());
         result.setAccountId(accountId);
+        result.setReceiverName(address.getReceiverName());
+        result.setReceiverPhone(address.getReceiverPhone());
+        result.setDefaultAddress(address.defaultAddress);
         document.set(result);
         return new ResponseBase(
                 "Create address successfully!",
@@ -56,5 +61,18 @@ public class AddressService {
                     null
             );
         }
+    }
+    public ResponseBase updateAddress(String addressId, Address updateAddress) throws ExecutionException, InterruptedException {
+        DocumentReference document = firestore.collection("address").document(addressId);
+        Map<String, Object> addressMap = new HashMap<>();
+        addressMap.put("address", updateAddress.address);
+        addressMap.put("receiverName", updateAddress.receiverName);
+        addressMap.put("receiverPhone", updateAddress.receiverPhone);
+        addressMap.put("defaultAdress", updateAddress.defaultAddress);
+        document.update(addressMap).get();
+        return new ResponseBase(
+                "Update Address Successfully!",
+                addressMap
+        );
     }
 }

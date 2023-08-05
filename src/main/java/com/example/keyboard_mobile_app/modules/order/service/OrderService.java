@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +97,7 @@ public class OrderService {
         result.setOrderId(document.getId());
         result.setOrderDate(java.sql.Date.valueOf(LocalDate.now()));
         result.setStatus("Chờ xác nhận");
-        result.setAddress(orderDto.address);
+        result.setReceiverInfo(orderDto.addressInfo);
         result.setAccountId(orderDto.accountId);
         document.set(result);
         orderDetailService.createOrderDetail(result.orderId, orderDto);
