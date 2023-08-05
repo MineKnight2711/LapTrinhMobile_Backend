@@ -2,6 +2,7 @@ package com.example.keyboard_mobile_app.modules.cart.controller;
 
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.cart.dto.DeleteCartDto;
+import com.example.keyboard_mobile_app.modules.cart.dto.ItemProductDetail;
 import com.example.keyboard_mobile_app.modules.cart.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,20 +45,14 @@ public class CartController {
     @DeleteMapping("/deleteItem/{accountId}")
     public ResponseBase deleteCart(
             @PathVariable("accountId") String accountId,
-            @RequestParam("productDetailId") String productDetailId
+            @RequestParam("productDetailId") List<ItemProductDetail> lstProductDetail
     ) throws ExecutionException, InterruptedException {
-        return cartService.deleteItemCart(accountId, productDetailId);
+        return cartService.deleteManyItems(accountId, lstProductDetail);
     }
     @DeleteMapping("/deleteMany")
     public ResponseBase deleteManyItems(
             @RequestBody DeleteCartDto dto
             ) throws ExecutionException, InterruptedException {
         return cartService.deleteManyItems(dto.accountId, dto.lstProductDetail);
-    }
-    @DeleteMapping("/clear-cart/{accountId}")
-    public ResponseBase clearCart(
-            @PathVariable("accountId") String accountId
-    ) throws ExecutionException, InterruptedException {
-        return cartService.clearCart(accountId);
     }
 }

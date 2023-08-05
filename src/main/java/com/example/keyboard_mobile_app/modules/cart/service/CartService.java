@@ -103,22 +103,6 @@ public class CartService {
                 null
         );
     }
-
-    public ResponseBase deleteCart(String accountId, String productDetailId) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        CollectionReference colRef = firestore.collection("cart");
-        Query query = colRef.whereEqualTo("accountId", accountId)
-                .whereEqualTo("productDetailId", productDetailId);
-        ApiFuture<QuerySnapshot> future = query.get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        for (QueryDocumentSnapshot document : documents) {
-            document.getReference().delete();
-        }
-        return new ResponseBase(
-                "Delete Cart Successfully!",
-                null
-        );
-    }
     public ResponseBase deleteManyItems(String accountId, List<ItemProductDetail> lstProductDetail) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         CollectionReference colRef = firestore.collection("cart");

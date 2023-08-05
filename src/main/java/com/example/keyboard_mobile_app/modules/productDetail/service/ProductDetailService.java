@@ -57,7 +57,6 @@ public class ProductDetailService {
         DocumentSnapshot document = future.get();
         ProductDetail result = new ProductDetail();
         if (document.exists()) {
-            // Convert the document data to an AccountResponse object
             result = document.toObject(ProductDetail.class);
             result.setProductDetailId(document.getId());
             return new ResponseBase(
