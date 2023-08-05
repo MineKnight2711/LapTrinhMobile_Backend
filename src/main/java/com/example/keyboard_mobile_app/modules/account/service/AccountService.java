@@ -113,9 +113,8 @@ public class AccountService {
             );
         } catch (FirebaseAuthException e) {
             // Handle exceptions (e.g., if the user does not exist)
-            e.printStackTrace();
             return new ResponseBase(
-                    "SendLinkFail",
+                    e.getMessage(),
                     null
             );
         }
