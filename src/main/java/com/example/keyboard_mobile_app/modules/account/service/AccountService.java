@@ -25,7 +25,6 @@ public class AccountService {
 
     public ResponseBase getAccountById(String accountId) throws InterruptedException, ExecutionException {
         Firestore firestore = FirestoreClient.getFirestore();
-
         // Specify the path to the account document in Firestore
         DocumentReference docRef = firestore.collection("accounts").document(accountId);
 

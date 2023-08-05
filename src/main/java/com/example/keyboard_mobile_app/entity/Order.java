@@ -1,4 +1,4 @@
-package com.example.keyboard_mobile_app.Entity;
+package com.example.keyboard_mobile_app.entity;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;

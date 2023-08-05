@@ -15,4 +15,10 @@ public class Address {
     public String accountId;
 
     public String address;
+
+    public String receiverName;
+
+    public String receiverPhone;
+
+    public boolean defaultAddress;
 }

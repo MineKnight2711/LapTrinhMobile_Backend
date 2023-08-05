@@ -1,6 +1,6 @@
 package com.example.keyboard_mobile_app.modules.productDetail.service;
 
-import com.example.keyboard_mobile_app.Entity.ProductDetail;
+import com.example.keyboard_mobile_app.entity.ProductDetail;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.shared.UploadImageService;
 import com.google.api.core.ApiFuture;

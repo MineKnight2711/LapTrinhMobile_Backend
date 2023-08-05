@@ -1,5 +1,5 @@
 package com.example.keyboard_mobile_app.modules.orderDetail.service;
-import com.example.keyboard_mobile_app.Entity.OrderDetail;
+import com.example.keyboard_mobile_app.entity.OrderDetail;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.order.dto.OrderDto;
 import com.example.keyboard_mobile_app.modules.order.dto.ProductOrderDto;

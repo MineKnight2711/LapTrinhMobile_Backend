@@ -1,5 +1,4 @@
 package com.example.keyboard_mobile_app.modules.cart.service;
-
 import com.example.keyboard_mobile_app.entity.Cart;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.cart.dto.ItemProductDetail;
@@ -18,11 +17,9 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class CartService {
     @Autowired
-    private Firestore firestore;
-
+    private Firestore firestore = FirestoreClient.getFirestore();
+    private CollectionReference collection = firestore.collection("cart");
     public ResponseBase getByAccountId(String accountId) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        CollectionReference collection = firestore.collection("cart");
         ApiFuture<QuerySnapshot> future = collection.get();
         QuerySnapshot snapshot = future.get();
         List<Cart> lstCart = new ArrayList<>();
