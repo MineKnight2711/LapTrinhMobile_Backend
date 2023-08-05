@@ -121,4 +121,24 @@ public class AccountService {
             );
         }
     }
+    public ResponseBase updateFingerprintAuthentication(String accountId, boolean isFingerprintEnabled) {
+        try {
+            DocumentReference document = firestore.collection("accounts").document(accountId);
+            Map<String, Object> updateData = new HashMap<>();
+            updateData.put("isFingerPrintAuthentication", isFingerprintEnabled);
+
+            document.update(updateData).get();
+
+            return new ResponseBase(
+                    "Fingerprint authentication updated successfully!",
+                    null
+            );
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return new ResponseBase(
+                    "Error updating fingerprint authentication",
+                    null
+            );
+        }
+    }
 }

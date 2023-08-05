@@ -128,7 +128,7 @@ public class CartService {
             document.getReference().delete();
         }
         return new ResponseBase(
-                "Delete Cart Successfully!",
+                "Clear Cart Successfully!",
                 null
         );
     }

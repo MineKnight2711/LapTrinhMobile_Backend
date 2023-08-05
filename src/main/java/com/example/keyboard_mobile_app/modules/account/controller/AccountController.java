@@ -56,4 +56,11 @@ public class AccountController {
     {
         return accountService.sendPasswordResetLink(email);
     }
+    @PutMapping("/fingerprint/{id}")
+    public ResponseBase updateFingerprintAuthentication(
+            @PathVariable("id") String id,
+            @RequestParam("isFingerprintEnabled") boolean isFingerprintEnabled
+    ) {
+        return accountService.updateFingerprintAuthentication(id, isFingerprintEnabled);
+    }
 }
