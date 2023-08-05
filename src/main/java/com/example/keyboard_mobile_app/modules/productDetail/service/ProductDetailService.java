@@ -1,7 +1,6 @@
 package com.example.keyboard_mobile_app.modules.productDetail.service;
 
-import com.example.keyboard_mobile_app.entity.Product;
-import com.example.keyboard_mobile_app.entity.ProductDetail;
+import com.example.keyboard_mobile_app.Entity.ProductDetail;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.shared.UploadImageService;
 import com.google.api.core.ApiFuture;
@@ -58,7 +57,6 @@ public class ProductDetailService {
         DocumentSnapshot document = future.get();
         ProductDetail result = new ProductDetail();
         if (document.exists()) {
-            // Convert the document data to an AccountResponse object
             result = document.toObject(ProductDetail.class);
             result.setProductDetailId(document.getId());
             return new ResponseBase(

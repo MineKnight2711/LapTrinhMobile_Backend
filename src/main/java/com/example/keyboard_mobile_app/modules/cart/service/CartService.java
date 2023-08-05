@@ -2,6 +2,7 @@ package com.example.keyboard_mobile_app.modules.cart.service;
 
 import com.example.keyboard_mobile_app.entity.Cart;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
+import com.example.keyboard_mobile_app.modules.cart.dto.ItemProductDetail;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
@@ -102,33 +103,21 @@ public class CartService {
                 null
         );
     }
-
-    public ResponseBase deleteCart(String accountId, String productDetailId) throws ExecutionException, InterruptedException {
+    public ResponseBase deleteManyItems(String accountId, List<ItemProductDetail> lstProductDetail) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         CollectionReference colRef = firestore.collection("cart");
-        Query query = colRef.whereEqualTo("accountId", accountId)
-                .whereEqualTo("productDetailId", productDetailId);
-        ApiFuture<QuerySnapshot> future = query.get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        for (QueryDocumentSnapshot document : documents) {
-            document.getReference().delete();
+        System.out.println(lstProductDetail.size());
+        for (ItemProductDetail item: lstProductDetail) {
+            Query query = colRef.whereEqualTo("accountId", accountId)
+                    .whereEqualTo("productDetailId", item.productDetailId);
+            ApiFuture<QuerySnapshot> future = query.get();
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+            for (QueryDocumentSnapshot document : documents) {
+                document.getReference().delete();
+            }
         }
         return new ResponseBase(
-                "Delete Cart Successfully!",
-                null
-        );
-    }
-    public ResponseBase clearCart(String accountId) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        CollectionReference colRef = firestore.collection("cart");
-        Query query = colRef.whereEqualTo("accountId", accountId);
-        ApiFuture<QuerySnapshot> future = query.get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        for (QueryDocumentSnapshot document : documents) {
-            document.getReference().delete();
-        }
-        return new ResponseBase(
-                "Clear Cart Successfully!",
+                "Delete items Successfully!",
                 null
         );
     }
