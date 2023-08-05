@@ -1,5 +1,5 @@
 package com.example.keyboard_mobile_app.modules.productDetail.controller;
-import com.example.keyboard_mobile_app.Entity.ProductDetail;
+import com.example.keyboard_mobile_app.entity.ProductDetail;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.productDetail.service.ProductDetailService;
 import org.springframework.beans.factory.annotation.Autowired;

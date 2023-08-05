@@ -1,10 +1,7 @@
-package com.example.keyboard_mobile_app.Entity;
-
+package com.example.keyboard_mobile_app.entity;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.HashMap;
 
 @Data
 @Getter
@@ -14,5 +11,11 @@ public class Address {
 
     public String accountId;
 
-    public HashMap<String, String> address;
+    public String address;
+
+    public String receiverName;
+
+    public String receiverPhone;
+
+    public boolean defaultAddress;
 }

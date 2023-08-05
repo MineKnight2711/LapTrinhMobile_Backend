@@ -18,13 +18,13 @@ public class AddressService {
     @Autowired
     private Firestore firestore;
 
-    public ResponseBase createAddress(String id, String address) {
+    public ResponseBase createAddress(String accountId, String address) {
         CollectionReference collection = firestore.collection("address");
-        DocumentReference document = collection.document(id);
+        DocumentReference document = collection.document();
         Address result = new Address();
         result.setAddressId(document.getId());
         result.setAddress(address);
-        result.setAccountId(id);
+        result.setAccountId(accountId);
         document.set(result);
         return new ResponseBase(
                 "Create address successfully!",
@@ -47,12 +47,12 @@ public class AddressService {
         }
         if (!lstAddress.isEmpty()) {
             return new ResponseBase(
-                    "Get List Product",
+                    "Get List Address",
                     lstAddress
             );
         } else {
             return new ResponseBase(
-                    "No product found!",
+                    "No Address found!",
                     null
             );
         }
