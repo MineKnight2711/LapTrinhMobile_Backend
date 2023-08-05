@@ -1,5 +1,6 @@
 package com.example.keyboard_mobile_app.modules.address.controller;
 
+import com.example.keyboard_mobile_app.entity.Address;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.address.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,16 @@ public class AddressController {
     @PostMapping("/create/{accountId}")
     public ResponseBase createAddress(
             @PathVariable("accountId") String accountId,
-            @RequestParam("address") String address
+            @ModelAttribute Address address
     ) {
         return addressService.createAddress(accountId, address);
+    }
+    //Put Method
+    @PutMapping("/update/{addressId}")
+    public ResponseBase updateAddress(
+            @PathVariable("addressId") String addressId,
+            @ModelAttribute Address updateAddress
+            ) throws ExecutionException, InterruptedException {
+        return addressService.updateAddress(addressId, updateAddress);
     }
 }

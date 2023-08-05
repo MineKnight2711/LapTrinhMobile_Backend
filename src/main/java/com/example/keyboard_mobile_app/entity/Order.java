@@ -16,7 +16,7 @@ public class Order {
     public String orderId;
     public String accountId;
 
-    public String address;
+    public String receiverInfo;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd")

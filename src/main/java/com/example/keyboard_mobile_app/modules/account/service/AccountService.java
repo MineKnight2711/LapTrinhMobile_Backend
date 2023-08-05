@@ -133,7 +133,7 @@ public class AccountService {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return new ResponseBase(
-                    "Error updating fingerprint authentication",
+                    "SendLinkFail",
                     null
             );
         }
