@@ -9,10 +9,7 @@ import lombok.Setter;
 @Setter
 public class OrderDetail {
     public String orderId;
-
     public String productDetailId;
-
     public int quantity;
-
     public Boolean checkedReview;
 }

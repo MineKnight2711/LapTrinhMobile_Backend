@@ -25,7 +25,6 @@ public class AccountService {
 
     public ResponseBase getAccountById(String accountId) throws InterruptedException, ExecutionException {
         Firestore firestore = FirestoreClient.getFirestore();
-
         // Specify the path to the account document in Firestore
         DocumentReference docRef = firestore.collection("accounts").document(accountId);
 
@@ -113,7 +112,25 @@ public class AccountService {
                     null
             );
         } catch (FirebaseAuthException e) {
-            // Handle exceptions (e.g., if the user does not exist)
+            return new ResponseBase(
+                    e.getMessage(),
+                    null
+            );
+        }
+    }
+    public ResponseBase updateFingerprintAuthentication(String accountId, boolean isFingerprintEnabled) {
+        try {
+            DocumentReference document = firestore.collection("accounts").document(accountId);
+            Map<String, Object> updateData = new HashMap<>();
+            updateData.put("isFingerPrintAuthentication", isFingerprintEnabled);
+
+            document.update(updateData).get();
+
+            return new ResponseBase(
+                    "Fingerprint authentication updated successfully!",
+                    null
+            );
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return new ResponseBase(
                     "SendLinkFail",

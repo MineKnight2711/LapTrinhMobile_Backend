@@ -1,12 +1,10 @@
 package com.example.keyboard_mobile_app.entity;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import javax.validation.constraints.Past;
 import java.util.Date;
 @Data
 @Getter
@@ -28,4 +26,6 @@ public class Account {
     private String imageUrl;
 
     private String phone;
+
+    private boolean isFingerPrintAuthentication;
 }
