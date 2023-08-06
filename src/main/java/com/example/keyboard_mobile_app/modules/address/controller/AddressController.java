@@ -27,7 +27,7 @@ public class AddressController {
     public ResponseBase createAddress(
             @PathVariable("accountId") String accountId,
             @ModelAttribute Address address
-    ) {
+    ) throws ExecutionException, InterruptedException {
         return addressService.createAddress(accountId, address);
     }
     //Put Method
