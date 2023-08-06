@@ -7,6 +7,7 @@ import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.brand.service.BrandService;
 import com.example.keyboard_mobile_app.modules.category.service.CategoryService;
 import com.example.keyboard_mobile_app.modules.product.dto.ProductDto;
+import com.example.keyboard_mobile_app.modules.product.repository.ProductRepository;
 import com.example.keyboard_mobile_app.shared.UploadImageService;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
@@ -29,48 +30,28 @@ public class ProductService {
     private Firestore firestore;
     @Autowired
     private UploadImageService uploadImageService;
+    @Autowired
+    private ProductRepository productRepository;
     public ResponseBase createProduct(MultipartFile[] displayImage, ProductDto dto) throws IOException {
-        CollectionReference collection = firestore.collection("product");
-
-        // set product
-        Product product = new Product();
-        product.setProductName(dto.getProductName());
-        product.setUnit(dto.getUnit());
-        product.setDescription(dto.getDescription());
         if (displayImage != null) {
             List<String> displayUrl = uploadImageService.uploadFiles(displayImage);
             if (!displayUrl.isEmpty()) {
-                product.setDisplayUrl(displayUrl.get(0));
+                dto.setDisplayUrl(displayUrl.get(0));
             }
         }
-        product.setCategory(dto.getCategoryId());
-        product.setBrand(dto.getBrandId());
-        DocumentReference document = collection.document();
-        product.setProductId(document.getId());
-        document.set(product);
+        Product result = productRepository.createProduct(dto);
         return new ResponseBase(
                 "Create product succesfully!",
-                product
+                result
         );
     }
 
     public ResponseBase getList() throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        CollectionReference colRef = firestore.collection("product");
-        ApiFuture<QuerySnapshot> future = colRef.get();
-        QuerySnapshot snapshot = future.get();
-        List<Product> lstProduct = new ArrayList<>();
-        for (DocumentSnapshot document : snapshot.getDocuments()) {
-            if (document.exists()) {
-                Product product = document.toObject(Product.class);
-                product.setProductId(document.getId());
-                lstProduct.add(product);
-            }
-        }
-        if (!lstProduct.isEmpty()) {
+        List<Product> result = productRepository.getList();
+        if (!result.isEmpty()) {
             return new ResponseBase(
                     "Get List Product",
-                    lstProduct
+                    result
             );
         } else {
             return new ResponseBase(
@@ -80,19 +61,8 @@ public class ProductService {
         }
     }
     public ResponseBase getById(String id) throws InterruptedException, ExecutionException {
-        Firestore firestore = FirestoreClient.getFirestore();
-
-        // Specify the path to the account document in Firestore
-        DocumentReference docRef = firestore.collection("product").document(id);
-
-        // Fetch the account document
-        ApiFuture<DocumentSnapshot> future = docRef.get();
-        DocumentSnapshot document = future.get();
-        Product result = new Product();
-        if (document.exists()) {
-            // Convert the document data to an AccountResponse object
-            result = document.toObject(Product.class);
-            result.setProductId(document.getId());
+        Product result = productRepository.getById(id);
+        if (result != null) {
             return new ResponseBase(
                     "Product found!",
                     result
@@ -106,25 +76,11 @@ public class ProductService {
         }
     }
     public ResponseBase getByCategoryId(String categoryId) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        CollectionReference colRef = firestore.collection("product");
-        ApiFuture<QuerySnapshot> future = colRef.get();
-        QuerySnapshot snapshot = future.get();
-        List<Product> lstProduct = new ArrayList<>();
-        for (DocumentSnapshot document : snapshot.getDocuments()) {
-            if (document.exists()) {
-                Product product = document.toObject(Product.class);
-                product.setProductId(document.getId());
-                System.out.println(product.getCategory().toString());
-                System.out.println(categoryId);
-                if(product.getCategory().equals(categoryId))
-                    lstProduct.add(product);
-            }
-        }
-        if (!lstProduct.isEmpty()) {
+        List<Product> result = productRepository.getByCategoryId(categoryId);
+        if (!result.isEmpty()) {
             return new ResponseBase(
                     "Get List Product By Category",
-                    lstProduct
+                    result
             );
         } else {
             return new ResponseBase(
@@ -134,23 +90,11 @@ public class ProductService {
         }
     }
     public ResponseBase getByBrand(String brandId) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        CollectionReference colRef = firestore.collection("product");
-        ApiFuture<QuerySnapshot> future = colRef.get();
-        QuerySnapshot snapshot = future.get();
-        List<Product> lstProduct = new ArrayList<>();
-        for (DocumentSnapshot document : snapshot.getDocuments()) {
-            if (document.exists()) {
-                Product product = document.toObject(Product.class);
-                product.setProductId(document.getId());
-                if(product.getBrand().equals(brandId))
-                    lstProduct.add(product);
-            }
-        }
-        if (!lstProduct.isEmpty()) {
+        List<Product> result = productRepository.getByBrandId(brandId);
+        if (!result.isEmpty()) {
             return new ResponseBase(
                     "Get List Product By Brand",
-                    lstProduct
+                    result
             );
         } else {
             return new ResponseBase(

@@ -3,6 +3,7 @@ package com.example.keyboard_mobile_app.modules.category.service;
 import com.example.keyboard_mobile_app.entity.Brand;
 import com.example.keyboard_mobile_app.entity.Category;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
+import com.example.keyboard_mobile_app.modules.category.repository.CategoryRepository;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
@@ -19,47 +20,30 @@ import java.util.concurrent.ExecutionException;
 public class CategoryService {
     @Autowired
     private Firestore firestore;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public ResponseBase createCategory(String categoryName) {
-        CollectionReference collection = firestore.collection("category");
-        Category category = new Category();
-        category.setCategoryName(categoryName);
-        DocumentReference document = collection.document();
-        category.setCategoryId(document.getId());
-        document.set(category);
+        Category result = categoryRepository.createCategory(categoryName);
         return new ResponseBase(
                 "Create Category Successfully!",
-                category
+                result
         );
     }
     public ResponseBase updateCategory(String categoryId, String categoryNameUpdate) throws ExecutionException, InterruptedException {
-        DocumentReference document = firestore.collection("category").document(categoryId);
-        Map<String, Object> categoryMap = new HashMap<>();
-        categoryMap.put("categoryName", categoryNameUpdate);
-        document.update(categoryMap).get();
+        Category result = categoryRepository.updateCategory(categoryId, categoryNameUpdate);
         return new ResponseBase(
                 "Update Brand successfully!",
-                categoryMap
+                result
         );
     }
 
     public ResponseBase getList() throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        CollectionReference colRef = firestore.collection("category");
-        ApiFuture<QuerySnapshot> future = colRef.get();
-        QuerySnapshot snapshot = future.get();
-        List<Category> lstCategory = new ArrayList<>();
-        for (DocumentSnapshot document : snapshot.getDocuments()) {
-            if (document.exists()) {
-                Category category = document.toObject(Category.class);
-                category.setCategoryId(document.getId());
-                lstCategory.add(category);
-            }
-        }
-        if (!lstCategory.isEmpty()) {
+        List<Category> result = categoryRepository.getList();
+        if (!result.isEmpty()) {
             return new ResponseBase(
                     "Get List Category",
-                    lstCategory
+                    result
             );
         } else {
             return new ResponseBase(

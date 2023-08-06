@@ -18,8 +18,6 @@ public class ProductDto {
     public String brandId;
     @JsonProperty("displayFile")
     public MultipartFile displayFile;
-    @JsonProperty("imageFile")
-    public MultipartFile[] imageFile;
 
     public String getProductName() {
         return productName;
@@ -75,11 +73,4 @@ public class ProductDto {
         this.displayFile = displayFile;
     }
 
-    public MultipartFile[] getImageFile() {
-        return imageFile;
-    }
-
-    public void setImageFile(MultipartFile[] imageFile) {
-        this.imageFile = imageFile;
-    }
 }

@@ -3,6 +3,7 @@ import com.example.keyboard_mobile_app.entity.Order;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.order.dto.OrderDto;
 import com.example.keyboard_mobile_app.modules.order.dto.ProductOrderDto;
+import com.example.keyboard_mobile_app.modules.order.repository.OrderRepository;
 import com.example.keyboard_mobile_app.modules.orderDetail.service.OrderDetailService;
 import com.example.keyboard_mobile_app.modules.productDetail.service.ProductDetailService;
 import com.google.api.core.ApiFuture;
@@ -21,30 +22,18 @@ public class OrderService {
     @Autowired
     private Firestore firestore;
     @Autowired
-    private FirebaseAuth firebaseAuth;
-    @Autowired
     private OrderDetailService orderDetailService;
     @Autowired
     private ProductDetailService productDetailService;
+    @Autowired
+    private OrderRepository orderRepository;
 
     public ResponseBase getOrderByAccountId(String accountId) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        CollectionReference colRef = firestore.collection("order");
-        ApiFuture<QuerySnapshot> future = colRef.get();
-        QuerySnapshot snapshot = future.get();
-        List<Order> lstOrder = new ArrayList<>();
-        for (DocumentSnapshot document : snapshot.getDocuments()) {
-            if (document.exists()) {
-                Order order = document.toObject(Order.class);
-                order.setOrderId(document.getId());
-                if(order.getAccountId().equals(accountId))
-                    lstOrder.add(order);
-            }
-        }
-        if (!lstOrder.isEmpty()) {
+        List<Order> result = orderRepository.getOrderByAccountId(accountId);
+        if (!result.isEmpty()) {
             return new ResponseBase(
                     "Get List Order",
-                    lstOrder
+                    result
             );
         } else {
             return new ResponseBase(
@@ -54,23 +43,11 @@ public class OrderService {
         }
     }
     public ResponseBase getOrderByStatus(String accountId, String status) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        CollectionReference colRef = firestore.collection("order");
-        ApiFuture<QuerySnapshot> future = colRef.get();
-        QuerySnapshot snapshot = future.get();
-        List<Order> lstOrder = new ArrayList<>();
-        for (DocumentSnapshot document : snapshot.getDocuments()) {
-            if (document.exists()) {
-                Order order = document.toObject(Order.class);
-                order.setOrderId(document.getId());
-                if(order.getStatus().equals(status))
-                    lstOrder.add(order);
-            }
-        }
-        if (!lstOrder.isEmpty()) {
+        List<Order> result = orderRepository.getOrderByStatus(accountId, status);
+        if (!result.isEmpty()) {
             return new ResponseBase(
                     "Get List Order",
-                    lstOrder
+                    result
             );
         } else {
             return new ResponseBase(
@@ -91,19 +68,11 @@ public class OrderService {
                         null
                 );
         }
-        CollectionReference collection = firestore.collection("order");
-        DocumentReference document = collection.document();
-        Order result = new Order();
-        result.setOrderId(document.getId());
-        result.setOrderDate(java.sql.Date.valueOf(LocalDate.now()));
-        result.setStatus("Chờ xác nhận");
-        result.setReceiverInfo(orderDto.addressInfo);
-        result.setAccountId(orderDto.accountId);
-        document.set(result);
+        Order result = orderRepository.createOrder(orderDto);
         orderDetailService.createOrderDetail(result.orderId, orderDto);
         return new ResponseBase(
                 "Success",
-                null
+                result
         );
     }
 }

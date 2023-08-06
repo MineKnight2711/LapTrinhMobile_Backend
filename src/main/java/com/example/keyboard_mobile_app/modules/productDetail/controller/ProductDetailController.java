@@ -18,7 +18,7 @@ public class ProductDetailController {
     //Get Method
     @GetMapping()
     public ResponseBase getListProductDetail() throws ExecutionException, InterruptedException {
-        return productDetailService.getListProduct();
+        return productDetailService.getListProductDetail();
     }
     @GetMapping("/getById/{id}")
     public ResponseBase getById(@PathVariable("id") String id) throws ExecutionException, InterruptedException {

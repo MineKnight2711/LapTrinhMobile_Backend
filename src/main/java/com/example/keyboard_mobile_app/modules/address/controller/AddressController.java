@@ -27,7 +27,7 @@ public class AddressController {
     public ResponseBase createAddress(
             @PathVariable("accountId") String accountId,
             @ModelAttribute Address address
-    ) {
+    ) throws ExecutionException, InterruptedException {
         return addressService.createAddress(accountId, address);
     }
     //Put Method
@@ -44,5 +44,10 @@ public class AddressController {
             @ModelAttribute Address updateAddress
     ) throws ExecutionException, InterruptedException {
         return addressService.updateAddressDatVersion(addressId, updateAddress);
+    }
+
+    @DeleteMapping("/delete/{addressId}")
+    public ResponseBase deleteAddress(@PathVariable("addressId") String addressId) throws ExecutionException, InterruptedException {
+        return addressService.deleteAddress(addressId);
     }
 }
