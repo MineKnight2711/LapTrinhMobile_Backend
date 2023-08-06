@@ -38,4 +38,11 @@ public class AddressController {
             ) throws ExecutionException, InterruptedException {
         return addressService.updateAddress(addressId, updateAddress);
     }
+    @PutMapping("/updateV2/{addressId}")
+    public ResponseBase updateAddressDatVersion(
+            @PathVariable("addressId") String addressId,
+            @ModelAttribute Address updateAddress
+    ) throws ExecutionException, InterruptedException {
+        return addressService.updateAddressDatVersion(addressId, updateAddress);
+    }
 }

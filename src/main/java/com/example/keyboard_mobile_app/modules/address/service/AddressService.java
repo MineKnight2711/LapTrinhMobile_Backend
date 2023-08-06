@@ -75,4 +75,47 @@ public class AddressService {
                 addressMap
         );
     }
+    public ResponseBase updateAddressDatVersion(String addressId, Address updateAddress) throws ExecutionException, InterruptedException {
+        DocumentReference document = firestore.collection("address").document(addressId);
+        Map<String, Object> addressMap = new HashMap<>();
+        addressMap.put("address", updateAddress.address);
+        addressMap.put("receiverName", updateAddress.receiverName);
+        addressMap.put("receiverPhone", updateAddress.receiverPhone);
+        addressMap.put("defaultAddress", updateAddress.defaultAddress);
+
+        ResponseBase newResponebase =new ResponseBase(
+                "",
+                null
+        );
+
+
+        // Query cac dia chia khac cua user
+        CollectionReference addressCollection = firestore.collection("address");
+        Query query = addressCollection.whereEqualTo("accountId", updateAddress.accountId)
+                .whereEqualTo("defaultAddress", true);
+        QuerySnapshot querySnapshot = query.get().get();
+
+        // Neu defaultAddress duoc cap nhat thanh true
+        if (updateAddress.defaultAddress) {
+            // Cap nhat dia chi hien tai
+            document.update(addressMap).get();
+
+            //Lặp qua cac Document để check  defaultAddress nào true và sửa lại thành false
+            for (QueryDocumentSnapshot snapshot : querySnapshot.getDocuments()) {
+                String otherAddressId = snapshot.getId();
+                if (!otherAddressId.equals(addressId)) {
+                    DocumentReference otherDocument = addressCollection.document(otherAddressId);
+                    otherDocument.update("defaultAddress", false);
+                }
+            }
+
+            newResponebase.message="Update Address Successfully!";
+            newResponebase.data=addressMap;
+        }
+        else if(querySnapshot.size()==1 && !updateAddress.defaultAddress){
+            //Kiểm tra truong hop nguoi dung set nguoc ve false cua dia chi mac dinh duy nhat
+            newResponebase.message="There must be at least 1 default address!";
+        }
+        return newResponebase;
+    }
 }
