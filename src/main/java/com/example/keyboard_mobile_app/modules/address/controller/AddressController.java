@@ -38,13 +38,6 @@ public class AddressController {
             ) throws ExecutionException, InterruptedException {
         return addressService.updateAddress(addressId, updateAddress);
     }
-    @PutMapping("/updateV2/{addressId}")
-    public ResponseBase updateAddressDatVersion(
-            @PathVariable("addressId") String addressId,
-            @ModelAttribute Address updateAddress
-    ) throws ExecutionException, InterruptedException {
-        return addressService.updateAddressDatVersion(addressId, updateAddress);
-    }
 
     @DeleteMapping("/delete/{addressId}")
     public ResponseBase deleteAddress(@PathVariable("addressId") String addressId) throws ExecutionException, InterruptedException {

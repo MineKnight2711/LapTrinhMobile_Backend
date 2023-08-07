@@ -48,50 +48,6 @@ public class AddressService {
                 null
         );
     }
-    public ResponseBase updateAddressDatVersion(String addressId, Address updateAddress) throws ExecutionException, InterruptedException {
-        DocumentReference document = firestore.collection("address").document(addressId);
-        Map<String, Object> addressMap = new HashMap<>();
-        addressMap.put("address", updateAddress.getAddress());
-        addressMap.put("receiverName", updateAddress.getReceiverName());
-        addressMap.put("receiverPhone", updateAddress.getReceiverPhone());
-        addressMap.put("defaultAddress", updateAddress.isDefaultAddress());
-
-        ResponseBase newResponebase = new ResponseBase(
-                "",
-                null
-        );
-
-
-        // Query cac dia chia khac cua user
-        CollectionReference addressCollection = firestore.collection("address");
-        Query query = addressCollection.whereEqualTo("accountId", updateAddress.getAccountId())
-                .whereEqualTo("defaultAddress", true);
-        QuerySnapshot querySnapshot = query.get().get();
-
-        // Neu defaultAddress duoc cap nhat thanh true
-        if (updateAddress.isDefaultAddress()) {
-            // Cap nhat dia chi hien tai
-            document.update(addressMap).get();
-
-            //Lặp qua cac Document để check  defaultAddress nào true và sửa lại thành false
-            for (QueryDocumentSnapshot snapshot : querySnapshot.getDocuments()) {
-                String otherAddressId = snapshot.getId();
-                if (!otherAddressId.equals(addressId)) {
-                    DocumentReference otherDocument = addressCollection.document(otherAddressId);
-                    otherDocument.update("defaultAddress", false);
-                }
-            }
-
-            newResponebase.message="Update Address Successfully!";
-            newResponebase.data=addressMap;
-        }
-        else if(querySnapshot.size()==1 && !updateAddress.isDefaultAddress()){
-            //Kiểm tra truong hop nguoi dung set nguoc ve false cua dia chi mac dinh duy nhat
-            newResponebase.message="There must be at least 1 default address!";
-        }
-        return newResponebase;
-    }
-
 
     public ResponseBase deleteAddress(String addressId) throws ExecutionException, InterruptedException {
         String result=addressRepository.deleteAddress(addressId);
