@@ -1,6 +1,7 @@
 package com.example.keyboard_mobile_app.modules.account.controller;
 
 import com.example.keyboard_mobile_app.entity.Account;
+import com.example.keyboard_mobile_app.entity.Address;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.account.dto.AccountResponseDto;
 import com.example.keyboard_mobile_app.modules.account.service.AccountService;
@@ -62,5 +63,13 @@ public class AccountController {
             @RequestParam("isFingerprintEnabled") boolean isFingerprintEnabled
     ) {
         return accountService.updateFingerprintAuthentication(id, isFingerprintEnabled);
+    }
+
+    @PutMapping("/updateImage/{accountId}")
+    public ResponseBase changeImage(
+            @PathVariable("accountId") String accountId,
+            @RequestParam String newImageUrl
+    ) {
+        return accountService.changeImage(accountId, newImageUrl);
     }
 }

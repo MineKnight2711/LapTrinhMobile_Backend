@@ -40,7 +40,14 @@ public class CartController {
         return cartService.updateCart(accountId, productDetailId, quantity);
     }
     //Delete Method
-    @DeleteMapping("/deleteItem/{accountId}")
+    @DeleteMapping("/delete/{accountId}")
+    public ResponseBase deleteCart(
+            @PathVariable("accountId") String accountId,
+            @RequestParam("productDetailId") String productDetailId
+    ) throws ExecutionException, InterruptedException {
+        return cartService.deleteItem(accountId, productDetailId);
+    }
+    @DeleteMapping("/deleteItems/{accountId}")
     public ResponseBase deleteCart(
             @PathVariable("accountId") String accountId,
             @RequestParam("productDetailId") List<ItemProductDetail> lstProductDetail

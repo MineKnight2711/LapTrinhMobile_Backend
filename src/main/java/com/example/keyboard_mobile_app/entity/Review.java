@@ -15,10 +15,11 @@ import java.util.Date;
 @Getter
 @Setter
 public class Review {
-    public String reviewId;
-    public String account;
+    private String reviewId;
 
-    public String product;
+    private String accountId;
+
+    private String productId;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -26,7 +27,7 @@ public class Review {
 
     @Max(5)
     @Min(1)
-    public int star;
+    private double star;
 
-    public String comment;
+    private String comment;
 }

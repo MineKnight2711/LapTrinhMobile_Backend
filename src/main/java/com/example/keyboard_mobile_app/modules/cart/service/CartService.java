@@ -57,6 +57,21 @@ public class CartService {
             );
         }
     }
+    public ResponseBase deleteItem(String accountId, String productDetailId) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        CollectionReference colRef = firestore.collection("cart");
+        Query query = colRef.whereEqualTo("accountId", accountId)
+                .whereEqualTo("productDetailId", productDetailId);
+        ApiFuture<QuerySnapshot> future = query.get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (QueryDocumentSnapshot document : documents) {
+            document.getReference().delete();
+        }
+        return new ResponseBase(
+                "Delete Cart Successfully!",
+                null
+        );
+    }
     public ResponseBase updateCart(String accountId, String productDetailId, int updatedQuantity) throws ExecutionException, InterruptedException{
         CollectionReference collection = firestore.collection("cart");
         ApiFuture<QuerySnapshot> future = collection.whereEqualTo("accountId", accountId)

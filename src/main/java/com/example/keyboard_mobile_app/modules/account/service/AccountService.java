@@ -138,4 +138,22 @@ public class AccountService {
             );
         }
     }
+    public ResponseBase changeImage(String accountId,String newImageUrl){
+        DocumentReference document = firestore.collection("accounts").document(accountId);
+        Map<String, Object> updateData = new HashMap<>();
+        updateData.put("imageUrl", newImageUrl);
+        try {
+            document.update(updateData).get();
+            return new ResponseBase(
+                    "Update image successfully!",
+                    null
+            );
+        } catch (InterruptedException | ExecutionException e){
+            e.printStackTrace();
+            return new ResponseBase(
+                    "Update Fail!",
+                    null
+            );
+        }
+    }
 }
