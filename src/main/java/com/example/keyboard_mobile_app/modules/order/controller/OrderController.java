@@ -43,4 +43,13 @@ public class OrderController {
     ) throws ExecutionException, InterruptedException {
         return orderService.createOrder(orderDto);
     }
+
+    //Put Method
+    @PutMapping("/update/{orderId}")
+    public ResponseBase updateStatus(
+            @PathVariable("orderId") String orderId,
+            @RequestParam("status") String status
+    ) throws ExecutionException, InterruptedException {
+        return orderService.updateStatusOrder(orderId, status);
+    }
 }

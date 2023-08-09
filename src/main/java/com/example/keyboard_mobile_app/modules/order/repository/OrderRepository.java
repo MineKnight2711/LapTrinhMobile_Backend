@@ -1,5 +1,6 @@
 package com.example.keyboard_mobile_app.modules.order.repository;
 
+import com.example.keyboard_mobile_app.entity.Address;
 import com.example.keyboard_mobile_app.entity.Order;
 import com.example.keyboard_mobile_app.entity.ProductDetail;
 import com.example.keyboard_mobile_app.modules.order.dto.OrderDto;
@@ -10,12 +11,15 @@ import com.example.keyboard_mobile_app.modules.productDetail.repository.ProductD
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Repository
@@ -109,5 +113,27 @@ public class OrderRepository {
             order.setListOrderDetail(orderDetails);
         }
         return ordersWithDetails;
+    }
+    public void changeStatusOrder(String orderId, String status) throws ExecutionException, InterruptedException {
+        DocumentReference document = firestore.collection("order").document(orderId);
+        Map<String, Object> orderMap = new HashMap<>();
+        Order order = getByOrderId(orderId);
+        orderMap.put("accountId", order.getAccountId());
+        orderMap.put("receiverInfo", order.getReceiverInfo());
+        orderMap.put("orderDate", order.getOrderDate());
+        orderMap.put("deliveryDate", order.getDeliveryDate());
+        orderMap.put("status", status);
+        document.update(orderMap).get();
+    }
+    public Order getByOrderId(String orderId) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        DocumentReference docRef = firestore.collection("order").document(orderId);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = future.get();
+        Order result = new Order();
+        if (document.exists()) {
+            result = document.toObject(Order.class);
+        }
+        return result;
     }
 }

@@ -92,4 +92,12 @@ public class OrderService {
                 result
         );
     }
+    public ResponseBase updateStatusOrder(String orderId, String status) throws ExecutionException, InterruptedException {
+        orderRepository.changeStatusOrder(orderId, status);
+        return new ResponseBase(
+                "Success",
+                null
+        );
+    }
+
 }
