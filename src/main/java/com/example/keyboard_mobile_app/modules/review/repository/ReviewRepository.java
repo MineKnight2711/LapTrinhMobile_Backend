@@ -3,6 +3,7 @@ package com.example.keyboard_mobile_app.modules.review.repository;
 import com.example.keyboard_mobile_app.entity.Address;
 import com.example.keyboard_mobile_app.entity.Product;
 import com.example.keyboard_mobile_app.entity.Review;
+import com.example.keyboard_mobile_app.modules.cart.dto.ItemProductDetail;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseException;
@@ -48,5 +49,18 @@ public class ReviewRepository {
         newReview.setComment(review.getComment());
         document.set(newReview);
         return newReview;
+    }
+
+    public String deleteReviewById(String reviewId) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        DocumentReference docRef = firestore.collection("review").document(reviewId);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = future.get();
+        if (document.exists()) {
+            docRef.delete();
+            return "Review deleted!";
+        } else {
+            return "Review not found!";
+        }
     }
 }

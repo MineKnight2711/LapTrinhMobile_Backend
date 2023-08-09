@@ -55,9 +55,7 @@ public class OrderRepository {
         CollectionReference colRef = firestore.collection("order");
         ApiFuture<QuerySnapshot> future = colRef.get();
         QuerySnapshot snapshot = future.get();
-
         List<QueryOrderDto> lstQueryOrderDto = new ArrayList<>();
-
         for (DocumentSnapshot document : snapshot.getDocuments()) {
             if (document.exists()) {
                 QueryOrderDto queryOrderDto = document.toObject(QueryOrderDto.class);
@@ -89,13 +87,10 @@ public class OrderRepository {
 //        }
 //        return lstOrder;
 //    }
-
     //Sau đó dùng kết quả tìm thấy để fetch tiếp orderdetail
     public List<QueryOrderDto> getOrdersWithDetailsByAccountId(String accountId) throws ExecutionException, InterruptedException {
         List<QueryOrderDto> ordersWithDetails = getOrdersByAccountId(accountId);
-
         Firestore firestore = FirestoreClient.getFirestore();
-
         for (QueryOrderDto order : ordersWithDetails) {
             List<QueryOrderDetailDto> orderDetails = new ArrayList<>();
             CollectionReference orderDetailColRef = firestore.collection("orderDetail");
@@ -111,7 +106,6 @@ public class OrderRepository {
                     orderDetails.add(orderDetail);
                 }
             }
-
             order.setListOrderDetail(orderDetails);
         }
         return ordersWithDetails;

@@ -18,9 +18,17 @@ public class ReviewController {
     public ResponseBase getAllReview(@PathVariable("productId") String productId) throws ExecutionException, InterruptedException {
         return reviewService.getListReview(productId);
     }
+    // Post Method
     @PostMapping("/create/{accountId}")
     public ResponseBase createReview(@PathVariable("accountId") String accountId, @ModelAttribute Review review)
     {
         return reviewService.addReview(accountId,review);
+    }
+    // Delete Method
+    @DeleteMapping("/delete/{reviewId}")
+    public ResponseBase deleteReviewById(
+            @PathVariable("reviewId") String reviewId
+    ) throws ExecutionException, InterruptedException {
+        return reviewService.deleteReviewById(reviewId);
     }
 }

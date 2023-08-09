@@ -66,7 +66,6 @@ public class CartRepository {
     public void deleteManyItems(String accountId, List<ItemProductDetail> lstProductDetail) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         CollectionReference colRef = firestore.collection("cart");
-        System.out.println(lstProductDetail.size());
         for (ItemProductDetail item: lstProductDetail) {
             Query query = colRef.whereEqualTo("accountId", accountId)
                     .whereEqualTo("productDetailId", item.productDetailId);

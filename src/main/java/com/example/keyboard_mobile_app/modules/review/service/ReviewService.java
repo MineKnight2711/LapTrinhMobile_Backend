@@ -16,17 +16,23 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
     public ResponseBase getListReview(String productId) throws ExecutionException, InterruptedException {
-        List<Review> reviewList=reviewRepository.getList(productId);
+        List<Review> reviewList = reviewRepository.getList(productId);
         return new ResponseBase(
                 "Get list successfully!",
                 reviewList
         );
     }
     public ResponseBase addReview(String accountId, Review review){
-        Review result=reviewRepository.addReview(accountId,review);
+        Review result = reviewRepository.addReview(accountId,review);
         return new ResponseBase(
                 "Create review successfully!",
                 result
+        );
+    }
+    public ResponseBase deleteReviewById(String reviewId) throws ExecutionException, InterruptedException {
+        return new ResponseBase(
+                reviewRepository.deleteReviewById(reviewId),
+                null
         );
     }
 }
