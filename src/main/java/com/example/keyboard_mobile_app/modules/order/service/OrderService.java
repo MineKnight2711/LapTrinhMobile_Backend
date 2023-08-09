@@ -3,6 +3,7 @@ import com.example.keyboard_mobile_app.entity.Order;
 import com.example.keyboard_mobile_app.modules.ResponseBase;
 import com.example.keyboard_mobile_app.modules.order.dto.OrderDto;
 import com.example.keyboard_mobile_app.modules.order.dto.ProductOrderDto;
+import com.example.keyboard_mobile_app.modules.order.dto.QueryOrderDto;
 import com.example.keyboard_mobile_app.modules.order.repository.OrderRepository;
 import com.example.keyboard_mobile_app.modules.orderDetail.service.OrderDetailService;
 import com.example.keyboard_mobile_app.modules.productDetail.service.ProductDetailService;
@@ -29,7 +30,7 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     public ResponseBase getOrderByAccountId(String accountId) throws ExecutionException, InterruptedException {
-        List<Order> result = orderRepository.getOrderByAccountId(accountId);
+        List<QueryOrderDto> result = orderRepository.getOrdersByAccountId(accountId);
         if (!result.isEmpty()) {
             return new ResponseBase(
                     "Get List Order",
@@ -42,8 +43,24 @@ public class OrderService {
             );
         }
     }
+
+    public ResponseBase getAndFetchOrder(String accountId) throws ExecutionException, InterruptedException {
+        List<QueryOrderDto> result = orderRepository.getOrdersWithDetailsByAccountId(accountId);
+        if (!result.isEmpty()) {
+            return new ResponseBase(
+                    "Get List Successfully",
+                    result
+            );
+        } else {
+            return new ResponseBase(
+                    "No Order found!",
+                    null
+            );
+        }
+    }
+
     public ResponseBase getOrderByStatus(String accountId, String status) throws ExecutionException, InterruptedException {
-        List<Order> result = orderRepository.getOrderByStatus(accountId, status);
+        List<QueryOrderDto> result = orderRepository.getOrderByStatus(accountId, status);
         if (!result.isEmpty()) {
             return new ResponseBase(
                     "Get List Order",

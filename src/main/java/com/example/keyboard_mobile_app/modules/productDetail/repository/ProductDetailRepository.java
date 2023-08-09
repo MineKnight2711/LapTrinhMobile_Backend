@@ -1,5 +1,8 @@
 package com.example.keyboard_mobile_app.modules.productDetail.repository;
+import com.example.keyboard_mobile_app.entity.Product;
 import com.example.keyboard_mobile_app.entity.ProductDetail;
+import com.example.keyboard_mobile_app.modules.order.dto.QueryProductDetailDto;
+import com.example.keyboard_mobile_app.modules.product.repository.ProductRepository;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
@@ -13,7 +16,8 @@ import java.util.concurrent.ExecutionException;
 public class ProductDetailRepository {
     @Autowired
     private Firestore firestore;
-
+    @Autowired
+    private ProductRepository productRepository;
     public ProductDetail createProduct(ProductDetail productDetail) {
         CollectionReference collection = firestore.collection("productDetail");
         DocumentReference document = collection.document();
@@ -42,6 +46,24 @@ public class ProductDetailRepository {
             return result;
         } else {
             // Account with the specified ID not found
+            return null;
+        }
+    }
+    public QueryProductDetailDto queryDetailById(String id) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        // Specify the path to the account document in Firestore
+        DocumentReference docRef = firestore.collection("productDetail").document(id);
+        // Fetch the account document
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = future.get();
+        QueryProductDetailDto result = new QueryProductDetailDto();
+        if (document.exists()) {
+            result = document.toObject(QueryProductDetailDto.class);
+            Product productReceived=productRepository.getById(document.getString("productId"));
+            result.setProduct(productReceived);
+            result.setProductDetailId(document.getId());
+            return result;
+        } else {
             return null;
         }
     }

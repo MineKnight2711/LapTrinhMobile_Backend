@@ -73,8 +73,6 @@ public class ProductRepository {
             if (document.exists()) {
                 Product product = document.toObject(Product.class);
                 product.setProductId(document.getId());
-                System.out.println(product.getCategory().toString());
-                System.out.println(categoryId);
                 if(product.getCategory().equals(categoryId))
                     lstProduct.add(product);
             }

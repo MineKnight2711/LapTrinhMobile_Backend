@@ -21,6 +21,13 @@ public class OrderController {
     ) throws ExecutionException, InterruptedException {
         return orderService.getOrderByAccountId(accountId);
     }
+
+    @GetMapping("/testGetOrder/{accountId}")
+    public ResponseBase getAndFetchOrder(
+            @PathVariable("accountId") String accountId
+    ) throws ExecutionException, InterruptedException {
+        return orderService.getAndFetchOrder(accountId);
+    }
     @GetMapping("/status/{accountId}")
     public ResponseBase getByStatus(
             @PathVariable("accountId") String accountId,

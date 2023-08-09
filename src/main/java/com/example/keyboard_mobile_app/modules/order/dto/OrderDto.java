@@ -4,6 +4,6 @@ import java.util.List;
 
 public class OrderDto {
     public String accountId;
-    public String addressInfo;
+    public String receiverInfo;
     public List<ProductOrderDto> lstProduct;
 }

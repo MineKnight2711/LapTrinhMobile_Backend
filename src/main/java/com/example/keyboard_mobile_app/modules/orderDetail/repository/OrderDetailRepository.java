@@ -24,7 +24,6 @@ public class OrderDetailRepository {
             DocumentReference document = collection.document();
             OrderDetail result = new OrderDetail();
             result.setOrderId(orderId);
-            result.setCheckedReview(false);
             result.setProductDetailId(productDto.productDetailId);
             result.setQuantity(productDto.quantity);
             document.set(result);
